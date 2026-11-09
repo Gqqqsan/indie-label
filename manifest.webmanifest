@@ -1,0 +1,14 @@
+{
+  "name": "インディーズレーベル、始めました",
+  "short_name": "レーベル始めました",
+  "description": "インディーズレーベルの社長になって、バンドを育て、人気レーベルを作るブラウザゲーム。",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#12152b",
+  "theme_color": "#12152b",
+  "lang": "ja",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

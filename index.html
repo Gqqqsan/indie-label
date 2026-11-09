@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>インディーズレーベル、始めました</title>
+<meta name="description" content="インディーズレーベルの社長になって、ライブハウスでバンドを見つけ、育て、人気レーベルを作る育成シミュレーション。ブラウザで無料で遊べます。">
+<meta name="theme-color" content="#12152b">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="favicon-48.png" sizes="48x48" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="インディーズレーベル、始めました">
+<meta property="og:title" content="インディーズレーベル、始めました">
+<meta property="og:description" content="インディーズレーベルの社長になって、ライブハウスでバンドを見つけ、育て、人気レーベルを作る育成シミュレーション。ブラウザで無料で遊べます。">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="ogp.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="インディーズレーベル、始めました - レコードのアイコンとゲームタイトル">
+<!-- 公開URLが決まったら: python3 build_publish.py <公開URL> で og:url と画像の絶対URLが入ります -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="インディーズレーベル、始めました">
+<meta name="twitter:description" content="インディーズレーベルの社長になって、ライブハウスでバンドを見つけ、育て、人気レーベルを作る育成シミュレーション。ブラウザで無料で遊べます。">
+<meta name="twitter:image" content="ogp.png">
+
+<style>
+:root{--bg:#eef0f7;--card:#fff;--ink:#1b1f3b;--sub:#5d6385;--acc:#e0457b;--acc2:#2a9d8f;--line:#d5d9ea;--chip:#eceffa;--shadow:0 1px 2px rgba(27,31,59,.08),0 4px 12px rgba(27,31,59,.06);
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12152b;--card:#1d2245;--ink:#eef0f7;--sub:#9aa1c9;--line:#343b6b;--chip:#2a3060;--shadow:0 1px 2px rgba(0,0,0,.4),0 4px 12px rgba(0,0,0,.3)}}
+:root[data-theme="dark"]{--bg:#12152b;--card:#1d2245;--ink:#eef0f7;--sub:#9aa1c9;--line:#343b6b;--chip:#2a3060;--shadow:0 1px 2px rgba(0,0,0,.4),0 4px 12px rgba(0,0,0,.3)}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+html.framed,html.framed body{height:100%;overflow:hidden}
+html.framed #sc{height:100%;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Hiragino Sans","Yu Gothic","Noto Sans JP",sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+main{max-width:680px;margin:0 auto;padding:8px 12px 24px}
+h1{font-size:1rem;margin:2px 0 6px}
+#labelName{font-size:1.15rem;font-weight:800;letter-spacing:.02em}
+#labelName::before{content:"💿 "}
+h3{font-size:.85rem;margin:10px 0 4px;color:var(--sub);letter-spacing:.04em}
+/* 上部固定: 資金バー・ログ・タブ */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding:4px 0 6px;margin-bottom:6px}
+.bar{display:grid;grid-template-columns:1.7fr 1.15fr .95fr 1fr;gap:4px;background:linear-gradient(135deg,#1b1f3b,#3a2a5e);color:#fff;padding:8px 10px;border-radius:12px;font-weight:700;font-size:.9rem;box-shadow:var(--shadow)}
+#time{font-size:.8rem;white-space:nowrap}
+.bar small{display:block;white-space:nowrap;font-weight:500;opacity:.75;font-size:.62rem;letter-spacing:.04em}
+.btns{display:flex;gap:6px;margin:5px 0;flex-wrap:wrap;align-items:center}
+button{font:inherit;font-weight:700;font-size:.85rem;border:0;border-radius:10px;padding:7px 12px;cursor:pointer;background:var(--acc);color:#fff;box-shadow:0 1px 0 rgba(0,0,0,.12);transition:transform .08s,filter .15s}
+button:hover:not(:disabled){filter:brightness(1.07)}
+button:active:not(:disabled){transform:translateY(1px)}
+button.alt{background:var(--acc2)}
+button.ghost{background:var(--card);color:var(--ink);border:1px solid var(--line);box-shadow:none}
+button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+button:disabled{opacity:.4;cursor:default}
+button[data-act="next"]{width:100%;padding:9px 12px;font-size:.95rem;letter-spacing:.04em}
+.warn{background:#fff4e0;color:#5a3b00;border:1px solid #f0b34a;border-left:4px solid #f59e0b;border-radius:10px;padding:8px 12px;margin:6px 0;font-size:.82rem;box-shadow:var(--shadow)}
+.warn b{display:block;margin-bottom:2px}
+.ovl{position:fixed;inset:0;z-index:50;background:rgba(10,12,28,.74);display:flex;align-items:center;justify-content:center;padding:12px}
+.ovl .box{background:var(--card);color:var(--ink);border-radius:16px;max-width:520px;width:100%;max-height:92vh;overflow-y:auto;padding:14px 16px 12px;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+.ovl h2{font-size:1.05rem;margin:0 0 6px}
+.ovl .it{margin:9px 0;padding:8px 10px;border-radius:10px;background:var(--chip);font-size:.84rem;line-height:1.55}
+.ovl .it b{display:block;font-size:.9rem;margin-bottom:2px}
+.ovl ul{margin:4px 0 0;padding-left:1.2em}
+.hdr{display:flex;align-items:center;justify-content:space-between;gap:4px 8px;flex-wrap:wrap}
+.hdr h1{margin:2px 0 6px}
+.hbtn{padding:4px 10px;font-size:.74rem;white-space:nowrap;flex:none}
+button.danger{background:#c0392b}
+.hbtns{display:flex;gap:6px;flex:none}
+.guide h2{font-size:.95rem;margin:0 0 4px}
+.guide ul{margin:2px 0 2px 1.1em;padding:0;font-size:.84rem}
+.guide li{margin:2px 0}
+.guide p{margin:3px 0;font-size:.84rem}
+.links{display:flex;gap:6px;justify-content:center;margin-top:6px}
+.links button{font-size:.8rem;padding:6px 14px}
+.ver{color:#d7d9ee;font-size:.7rem;margin-top:8px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .warn{background:#3a2c10;color:#ffe2a8;border-color:#8a6420}}
+:root[data-theme="dark"] .warn{background:#3a2c10;color:#ffe2a8;border-color:#8a6420}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--acc2);outline-offset:2px}
+#tabs{flex-wrap:nowrap;gap:4px;overflow-x:auto;scrollbar-width:none}
+#tabs button{flex:1 0 auto;border-radius:999px;padding:6px 9px;font-size:.76rem;white-space:nowrap}
+#tabs button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+input,select{font:inherit;width:100%;padding:5px 8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);margin:2px 0}
+select.sm{width:auto}
+/* カード */
+.card{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--c,var(--line));border-radius:12px;padding:9px 12px;margin-bottom:8px;box-shadow:var(--shadow)}
+.card.hot{background:linear-gradient(90deg,rgba(224,69,123,.12),transparent 60%),var(--card)}
+.card input.name{font-weight:800;font-size:1.05rem;border:0;border-bottom:1px dashed var(--line);border-radius:0;background:transparent;padding:2px 0}
+.hero{text-align:center;padding:36px 16px;background:linear-gradient(135deg,#1b1f3b,#5a2a6e);color:#fff;border-left-color:var(--acc)}
+.hero h1{font-size:1.5rem}
+.hero h1::before{content:"🎤 "}
+.hero .meta{color:#d7d9ee}
+.hero label.meta{display:block}
+.hero input{background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.3)}
+.hero input::placeholder{color:rgba(255,255,255,.55)}
+.meta{margin:1px 0 3px;font-size:.75rem;color:var(--sub)}
+.chips{display:flex;flex-wrap:wrap;gap:4px;margin:3px 0 5px}
+.chip{background:var(--chip);color:var(--ink);border-radius:999px;padding:1px 8px;font-size:.72rem;font-weight:600}
+.chip.g{background:var(--c);color:#fff}
+.chip.neg{background:#ffe0e0;color:#b00020}
+.pips{color:var(--acc);letter-spacing:1px}
+.pips i{color:var(--line);font-style:normal}
+.spark{display:flex;align-items:flex-end;gap:2px;height:34px;margin:6px 0 2px}
+.spark i{flex:1;min-width:3px;background:linear-gradient(var(--acc),var(--acc2));border-radius:2px 2px 0 0}
+.stats,.gauges{display:grid;grid-template-columns:1fr 1fr;gap:2px 14px;margin:4px 0}
+.row{display:grid;grid-template-columns:4.2em 1fr 2em;gap:6px;align-items:center;font-size:.78rem}
+.gauge{display:grid;grid-template-columns:3.2em 1fr 2em;gap:6px;align-items:center;font-size:.78rem;font-weight:700}
+.track{height:7px;background:var(--line);border-radius:4px;overflow:hidden}
+.fill{height:100%;background:linear-gradient(90deg,var(--acc2),var(--acc));border-radius:4px}
+.fill.g2{background:linear-gradient(90deg,#f6b73c,#e0457b)}
+.fill.g3{background:linear-gradient(90deg,#4cc9a8,#2a9d8f)}
+/* ログ */
+#log{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--acc);border-radius:10px;padding:4px 10px;margin:6px 0;font-size:.78rem;color:var(--sub);max-height:4.9em;overflow-y:auto;line-height:1.5;box-shadow:var(--shadow)}
+#log p{margin:0}
+#log p:first-child{color:var(--ink);font-weight:700}
+</style>
+</head>
+<body>
+<div id="sc">
+<main>
+<div id="title"></div>
+<div id="game" hidden>
+<div class="hdr"><h1 id="labelName">インディーズレーベル、始めました</h1><div class="hbtns"><button class="ghost hbtn" data-act="goalnow" id="goalBtn" aria-label="レーベルの目標を見る">🎯 目標</button><button class="ghost hbtn" data-act="howto" aria-label="遊び方を見る">❓ 遊び方</button><button class="ghost hbtn" data-act="totitle" aria-label="タイトル画面に戻る">🏠 タイトルへ</button></div></div>
+<div class="top"><div class="bar">
+  <span><small>📅 時期</small><b id="time"></b></span>
+  <span><small>💰 資金</small><b id="money"></b>万</span>
+  <span><small>⭐ 知名度</small><b id="fame"></b></span>
+  <span><small>📍 拠点</small><b id="home">未定</b></span>
+</div>
+<div class="btns"><button data-act="next" class="alt">この内容で1週間進める</button></div>
+<div id="warn"></div>
+<div id="log"></div>
+<div id="tabs" class="btns"></div>
+</div>
+<div id="live"></div>
+
+<div id="bands"><p class="meta">まだ所属バンドがいません。</p></div>
+
+<div id="sales"><p class="meta">発売した盤がここに並びます。</p></div>
+<div id="loan" hidden></div>
+<div id="hist" hidden></div>
+<div id="goal" hidden></div>
+<div id="mv" hidden></div>
+</div>
+</main>
+</div>
+<script>
+// ===== データ(数値はすべて仮) =====
+const REGIONS = {
+  北海道: ["北海道"], 東北: ["宮城","青森","岩手","秋田","山形","福島"],
+  関東: ["東京","神奈川","埼玉","千葉","茨城","栃木","群馬"], 中部: ["愛知","長野","静岡","新潟","石川"],
+  関西: ["大阪","兵庫","京都","滋賀","奈良","和歌山"], "中国・四国": ["広島","岡山","香川","愛媛"], 九州: ["福岡","熊本","鹿児島","沖縄"],
+};
+const GENRES = { "メロコア":1, "ハードロック":.9, "スカパンク":.9, "パンク":.9, "メタル":.8, "J-POP":1.2, "ソロ":1 };
+const TYPES = { early: { label: "早熟型", peak: 2, spread: 2 }, normal: { label: "標準型", peak: 5, spread: 3 }, late: { label: "晩成型", peak: 9, spread: 4 } };
+const STATS = ["演奏力", "作曲力", "ライブ力", "個性"];
+const STAT_FX = { "演奏力": "ツアー中の人気が上がりやすい", "作曲力": "盤がバズりやすい", "ライブ力": "集客(動員・ライブ収入)が増えやすい", "個性": "MVの視聴回数が増えやすい" };
+// w: 各工程の週数 [立ち上がり, 作曲, 収録, 編曲, プレス] / lc:レーベル費用 bc:バンド費用(万)
+const FMT = {
+  single: { label: "シングル", lc: 0, bc: 10, price: 1000, boost: 1, w: [1, 2, 1, 1, 1] },
+  mini: { label: "ミニアルバム", lc: 8, bc: 25, price: 2000, boost: 1.5, w: [1, 4, 2, 2, 1] },
+  album: { label: "アルバム", lc: 15, bc: 50, price: 3000, boost: 2, w: [1, 6, 3, 3, 2] },
+};
+const STAGES = [["立ち上がり", 1], ["作曲", 1], ["収録", 1], ["編曲(外注)", 0], ["プレス", 0]];   // 2つ目: バンドの行動を占有するか
+// バンドの性格(友好度2で判明。契約時の条件に関わる)
+const TRAITS = { "素直": "特に条件なし", "野心家": "知名度15以上のレーベルでないと契約しない(友好度が最大なら知名度10以上で契約してくれる)", "職人気質": "レーベルの取り分は4割まで", "義理堅い": "観に行くと友好度が2上がる", "現実派": "契約金が50万(友好度が最大なら40万に下げてくれる)" };
+const COST = { watchHome: 2, watchAway: 15, sign: 30, promo: 3, aid: 10, reissue: 5, relLive: 30 };
+const OVERHEAD = 1;   // レーベルの固定費(事務所・ネット回線・保険など)。毎週(万円)。数値は仮
+const GAME_VERSION = "0.9.0";   // 公開前のバージョン
+// クレジットに載せる制作者の情報。空欄のままの項目は表示されません(公開前にここを書き換える)
+const CREDITS = { producer: "", contact: "", site: "" };
+
+const freshState = () => ({ screen: "title", tab: "live", label: "", fav: null, respawn: [], week: 1, money: 200, loans: [], fame: 0, bands: [], home: null, view: null, pref: null, pools: {}, lastVisit: -9, used: false, logs: [], slot: null, alumni: [], nextId: 1, ltSel: [], ltName: "", hist: {}, llw: -1, intro: false, goal: null, stat: {}, review: null, over: null });
+const state = freshState();
+function resetState(keep) { const f = freshState(); Object.keys(state).forEach(k => delete state[k]); Object.assign(state, f, keep); }
+const rand = (a, b) => Math.random() * (b - a) + a;
+const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const esc = s => String(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+const inHome = p => REGIONS[state.home].includes(p);
+// バンド名: 英語名・漢字名・カタカナ名・ソロ名のパターンから生成
+const EN1 = ["Midnight","Paper","Velvet","Static","Hollow","Lunar","Electric","Pale","Silent","Burning","Cheap","Wild","Neon","Rusty"];
+const EN2 = ["Parade","Hearts","Riot","Echoes","Kids","Circuit","Animals","Letters","Engine","Tides","Cassette","Orchestra","Sparks","Wolves"];
+const JA = ["夜行","白昼","透明","深海","砂漠","終電","夕立","午前三時","青春","雨上がり","月曜","回転"];
+const JB = ["少年","楽団","クラブ","ロマンス","フィルム","サーカス","ラジオ","同盟","ハイウェイ","旅団"];
+const KA = ["ミルク","レモン","ポスト","ネオン","ブルー","ガラス","ランドリー"];
+const KB = ["ジャム","ガーデン","スープ","ロケット","ノイズ","ダンス","シガレッツ"];
+const SOLO = ["ミナト","soraneko","Haru","夕凪リオ","aoi.","ナギサ","Rin","月詠ユイ","kanata","ヒナタ","Sora Hirano","ミオ","ren","Yuki Mori","凪","ルカ"];
+function bandName(members) {
+  if (members === 1) return pick(SOLO);
+  const r = Math.random();
+  if (r < 0.35) return pick(EN1) + " " + pick(EN2);
+  if (r < 0.5) return "The " + pick(EN1) + " " + pick(EN2);
+  if (r < 0.8) return pick(JA) + pick(JB);
+  return pick(KA) + pick(KB);
+}
+const SA = ["夏の","夜の","最後の","透明な","ひとりの","雨の"], SB = ["終電","帰り道","ランドリー","ネオン","手紙","約束","朝焼け","ノイズ"];
+const songName = () => pick(SA) + pick(SB);
+const power = b => STATS.reduce((t, s) => t + b.ab[s], 0) / STATS.length;
+const num = n => Math.round(n);
+// ===== セーブ(このブラウザのlocalStorageに2スロット。描画のたびに自動保存) =====
+const SAVE_KEY = n => "indie-label-save-" + n;
+// セーブデータの形式のバージョン。ゲームの仕組みを変えてセーブの形が変わるときに上げて、MIGRATIONSに変換処理を足す
+const SAVE_VERSION = 2;
+const MIGRATIONS = {
+  // v1 → v2: MV・歴代バンド・サブスク・動員数などの導入前のデータ。足りない項目は、読み込み時の補完(ensureBand と初期値)で埋める
+  1: s => { s.alumni = s.alumni || []; s.hist = s.hist || {}; s.ltSel = s.ltSel || []; },
+};
+let saveWarned = false;
+function save() {
+  if (!state.slot) return;
+  try { localStorage.setItem(SAVE_KEY(state.slot), JSON.stringify({ v: SAVE_VERSION, gv: GAME_VERSION, savedAt: Date.now(), state })); }
+  catch (e) { if (!saveWarned) { saveWarned = true; log("⚠ この環境ではセーブできませんでした"); } }
+}
+function rawSlot(n) { try { return localStorage.getItem(SAVE_KEY(n)); } catch (e) { return null; } }
+// 読み込み結果: null=空き / {bad:"broken"|"newer"}=読み込めない / それ以外=セーブデータ
+function readSlot(n) {
+  const raw = rawSlot(n);
+  if (!raw) return null;
+  try {
+    const d = JSON.parse(raw);
+    if (!d || typeof d !== "object" || !d.state || typeof d.state !== "object" || !Array.isArray(d.state.bands) || !Number.isFinite(d.state.week)) return { bad: "broken" };
+    if ((d.v || 1) > SAVE_VERSION) return { bad: "newer", gv: d.gv };
+    return d;
+  } catch (e) { return { bad: "broken" }; }
+}
+function migrate(d) {
+  let v = d.v || 1;
+  while (v < SAVE_VERSION) { if (MIGRATIONS[v]) MIGRATIONS[v](d.state); v++; }
+  d.v = SAVE_VERSION;
+  return d;
+}
+// 読み込んだ状態の最低限の点検(数値が壊れていたら0に戻す)
+function repairState(s) {
+  ["money", "fame", "week"].forEach(k => { if (!Number.isFinite(s[k])) s[k] = k === "week" ? 1 : 0; });
+  if (!Array.isArray(s.loans)) s.loans = [];
+  if (!s.pools || typeof s.pools !== "object") s.pools = {};
+}
+let slotMsg = "", delAsk = 0, slotAsk = 0;   // セーブ選択画面の一時的な表示(セーブしない)
+function loadSlot(n) {
+  const d = readSlot(n);
+  if (!d || d.bad) { slotMsg = d && d.bad === "newer" ? "このデータは新しいバージョンのゲームで作られているため、読み込めません。" : "このデータは読み込めません。"; render(); return; }
+  const oldV = d.v || 1;
+  if (oldV < SAVE_VERSION) {   // 古い形式は、変換する前の元データを控えに残してから変換する
+    try { localStorage.setItem(SAVE_KEY(n) + "-before-v" + SAVE_VERSION, rawSlot(n)); } catch (e) {}
+    migrate(d);
+  }
+  resetState(d.state);
+  repairState(state); ensureGoal();
+  state.bands.forEach(ensureBand); Object.values(state.pools).forEach(a => a.forEach(ensureBand));
+  state.screen = state.over ? "over" : "game"; state.slot = n; slotMsg = ""; delAsk = 0; slotAsk = 0;
+  document.getElementById("log").innerHTML = (state.logs || []).map(l => `<p>${esc(l)}</p>`).join("");
+  render();   // 描画のときに、いまの形式で保存し直される
+}
+function deleteSlot(n) {
+  try { localStorage.removeItem(SAVE_KEY(n)); for (let v = 2; v <= SAVE_VERSION + 5; v++) localStorage.removeItem(SAVE_KEY(n) + "-before-v" + v); } catch (e) {}
+  if (state.slot === n) state.slot = null;
+}
+function slotInfo(d) {
+  const s = d.state, y = Math.floor((s.week - 1) / 52) + 1, w = (s.week - 1) % 52 + 1;
+  return esc((s.label || "").trim() || "名もなきレーベル") + " / " + dateOf(s.week) + " / 資金" + Math.round(s.money) + "万 / 所属" + s.bands.length + "組" + (s.over ? " / 💀ゲームオーバー" : "") + " / 保存 " + new Date(d.savedAt).toLocaleString("ja-JP");
+}
+const GC = { "メロコア": "#3b82f6", "ハードロック": "#f59e0b", "スカパンク": "#10b981", "パンク": "#ef4444", "メタル": "#8b5cf6", "J-POP": "#ec4899", "ソロ": "#14b8a6" };
+const gauge = (label, v, cls) => `<div class="gauge"><span>${label}</span><div class="track"><div class="fill ${cls}" style="width:${Math.min(100, v)}%"></div></div><b>${num(v)}</b></div>`;
+// バンドの人気の上昇は、全体に弱め。人気が高いほど上がりにくい(人気80で約半分)
+const addPop = (b, x) => { b.pop = Math.min(100, b.pop + x * 0.55 / (1 + b.pop / 80)); };
+// 知名度は上がるほど上がりにくい(逓減)。知名度20で上昇量が半分になる
+const addFame = x => { state.fame += x / (1 + state.fame / 20); };
+function log(t) { document.getElementById("log").insertAdjacentHTML("afterbegin", `<p>${esc(t)}</p>`); state.logs = [t, ...(state.logs || [])].slice(0, 30); }
+
+function createBand(home) {
+  const years = Math.floor(rand(0, 4)), talent = rand(50, 95), ab = {}, pot = {};
+  STATS.forEach(s => { pot[s] = Math.round(clamp(talent + rand(-15, 15), 40, 100)); ab[s] = Math.round(rand(12, 28) + years * 4); });
+  const members = (state.fav === "ソロ" && Math.random() < 0.4 ? 1 : pick([1, 3, 3, 3, 3, 4, 4, 4, 5, 5]))   // 1人1割・3人4割・4人3割・5人2割;
+  const b = { name: bandName(members), members, home, genre: members === 1 ? "ソロ" : (state.fav && state.fav !== "ソロ" && Math.random() < 0.4 ? state.fav : pick(Object.keys(GENRES).filter(g => g !== "ソロ"))),
+    years, type: pick(Object.keys(TYPES)), rate: rand(0.8, 1.2), ab, pot, pop: rand(5, 25), fund: 0, share: 0.4,
+    fr: 0, trait: pick(Object.keys(TRAITS)), plan: "rest", prod: null, tour: null, pending: null, discs: [], title: songName() };
+  b.imp = Math.round(clamp(power(b) + rand(-10, 10), 0, 100));
+  b.id = state.nextId++; b.draw = Math.round(b.pop * 4 * rand(0.85, 1.15)); b.tours = []; b.mvs = []; b.mvDisc = 0; b.mvTitle = ""; b.relLog = []; b.scandal = null; b.joined = 0; b.subPick = false; b.tourName = ""; b.lastRelease = null;
+  return b;
+}
+const getPool = p => state.pools[p] || (state.pools[p] = [createBand(p), createBand(p), createBand(p)]);
+
+// ===== レーベル(社長)の行動: 1週に1つ =====
+function useAction() { if (state.used) { log("今週のあなたの行動はもう使いました"); return false; } return true; }
+const FB_MEMBERS = [1, 3, 4, 5];
+function fbInit() { state.fb = { name: bandName(3), members: 3, genre: "メロコア" }; }
+function firstBand(home) {   // 最初に所属しているバンド: 人気もステータスも低め、知名度ゼロ
+  const f = state.fb, b = createBand(home), ab = {}, pot = {};
+  STATS.forEach(s => { ab[s] = Math.round(rand(6, 14)); pot[s] = Math.round(rand(55, 85)); });
+  Object.assign(b, { name: (f.name || "").trim() || bandName(f.members), members: f.members, genre: f.members === 1 ? "ソロ" : f.genre, years: 0, type: "normal", ab, pot, pop: rand(2, 6), trait: "素直", fr: 5,
+    fund: 10, share: 0.4, trust: 60, renew: 105, idle: 0, joined: 1, vis: undefined });
+  b.draw = 25; b.imp = Math.round(power(b));
+  b.promises = [newPromise(b)]; state.bands.push(b);
+  log(b.name + "(" + (b.members === 1 ? "ソロ" : b.members + "人組") + "・" + b.genre + ")が最初の所属バンドになった。1年以内に「" + b.promises[0].text + "」が約束");
+}
+function start(r) { state.screen = "game"; state.home = r; state.view = r; state.pref = REGIONS[r][0]; state.stat = {}; state.goal = newGoals(1); log((state.label.trim() || "名もなきレーベル") + "を" + r + "に設立"); if (state.fb) { firstBand(state.pref); state.fb = null; state.screen = "intro"; state.introPage = 0; } log("🎯 最初の目標: 5年以内に、3つのうち2つを達成しよう(「🎯 目標」タブ)"); render(); }
+function watch(p, i) {
+  if (!useAction()) return;
+  const b = getPool(p)[i], cost = inHome(p) ? COST.watchHome : COST.watchAway;
+  if (b.lastWatch !== undefined && state.week - b.lastWatch < 2) return log(b.name + "は先週観に行ったばかり。同じバンドには2週続けて行けません");
+  if (state.money < cost) return log("費用(" + cost + "万)が足りません");
+  state.money -= cost; state.used = true; b.lastWatch = state.week; b.fr = Math.min(5, b.fr + (b.trait === "義理堅い" ? 2 : 1));
+  log(b.name + "のライブを観に行った(友好度" + b.fr + "/5)"); render();
+}
+// 契約金: 基本30万。現実派は50万(友好度が最大なら40万)。入社希望は3割引
+function signFee(b) {
+  const f = b.trait === "現実派" ? (b.fr >= 5 ? 40 : 50) : COST.sign;
+  return Math.round(f * (b.app ? 0.7 : 1));
+}
+// 野心家が契約に求めるレーベルの知名度: 通常15、友好度が最大なら10
+const ambitionNeed = b => b.fr >= 5 ? 10 : 15;
+// 画面に出す契約金: 性格がまだ分からないうちは基本額(性格が分かると正確な額)
+const signFeeShown = b => (b.fr >= 2 || b.known) ? signFee(b) : Math.round(COST.sign * (b.app ? 0.7 : 1));
+function sign(p, i, share) {
+  if (!useAction()) return;
+  const b = getPool(p)[i], need = Math.round(share * 10), fee = signFee(b);   // 取り分が大きいほど高い友好度が必要
+  if (b.fr < need) return log("レーベル取り分" + need + "割で契約するには友好度" + need + "が必要です");
+  // 野心家: 知名度15未満のレーベルとは契約しない。ただし友好度が最大(5)なら、知名度10以上で契約してくれる
+  if (b.trait === "野心家" && state.fame < ambitionNeed(b)) { b.known = true; return log(b.name + "は野心家: 知名度" + ambitionNeed(b) + "以上のレーベルでないと契約しないと言われた" + (b.fr < 5 ? "(友好度が最大なら、知名度10以上で契約してくれそう)" : "")); }
+  if (b.trait === "職人気質" && share > 0.4) { b.known = true; return log(b.name + "は職人気質: レーベルの取り分は4割までと言われた"); }
+  if (state.money < fee) { b.known = true; return log("契約金(" + fee + "万)が足りません"); }
+  state.money -= fee; state.used = true;
+  const nn = (b.signName || "").trim(); if (nn) b.name = nn; delete b.signName;   // 契約のときに決めたバンド名(以降のログはこの名前)
+  getPool(p).splice(i, 1);
+  Object.assign(b, { vis: undefined, fund: fee, share, trust: b.app ? 80 : 20 + b.fr * 10, renew: state.week + 104, idle: 0, joined: state.week });   // 信頼度の初期値は友好度で決まる
+  b.promises = [newPromise(b)]; state.bands.push(b); bump("signed"); log(b.name + "の要望: 1年以内に「" + b.promises[0].text + "」(約束として記録)");
+  log(b.name + "と契約(取り分: レーベル" + need + "割)。" + TYPES[b.type].label + "だった"); render();
+}
+// 興味のないバンドをリストから消す(行動は消費しない)。ツアー・入社希望以外は、4週間後に新しいバンドが補充される
+function dismiss(p, i) {
+  const b = getPool(p).splice(i, 1)[0];
+  if (b.vis === undefined) state.respawn.push({ p, due: state.week + 4 });
+  log(b.name + "をリストから外した"); render();
+}
+// ===== 借入(行動は消費しない。数値は仮) =====
+// fame: 審査に必要なレーベルの知名度 / rate: 年利 / term: 返済期間(週)。毎週、元金の均等返済+残高への利息を払う
+const LENDERS = [
+  { name: "地元の信用金庫", limit: 100, rate: 0.03, term: 104, fame: 5, text: "金利が低く返済期間も長いが、借りられる額が小さく、審査(知名度5以上)がある" },
+  { name: "ノンバンク", limit: 60, rate: 0.18, term: 52, fame: 0, text: "審査なしですぐ借りられるが、金利が高く返済期間が短い" },
+  { name: "音楽ファンド", limit: 300, rate: 0.08, term: 78, fame: 30, text: "大きく借りられるが、審査(知名度30以上)が厳しい。金利は中くらい" },
+];
+const debtOf = name => state.loans.filter(l => l.lender === name).reduce((t, l) => t + l.rem, 0);
+function borrow(k, amt) {
+  const L = LENDERS[k];
+  if (state.fame < L.fame) return log(L.name + "の審査に通らなかった(知名度" + L.fame + "以上が必要)");
+  if (debtOf(L.name) + amt > L.limit) return log(L.name + "の借入上限(" + L.limit + "万)を超えます");
+  state.money += amt;
+  state.loans.push({ lender: L.name, amount: amt, rem: amt, rate: L.rate, term: L.term, left: L.term });
+  log(L.name + "から" + amt + "万円を借りた(年利" + Math.round(L.rate * 100) + "%・" + L.term + "週で返済)");
+  render();
+}
+function repay(i) {
+  const l = state.loans[i], cost = Math.round(l.rem);
+  if (state.money < cost) return log("全額返済には" + cost + "万円必要です");
+  state.money -= cost; state.loans.splice(i, 1);
+  log(l.lender + "の借入を全額返済した(" + cost + "万円)"); render();
+}
+function loanHTML() {
+  const weekly = state.loans.reduce((t, l) => t + l.rem * l.rate / 52 + l.amount / l.term, 0);
+  const cards = LENDERS.map((L, k) => {
+    const room = L.limit - debtOf(L.name), ok = state.fame >= L.fame;
+    const btns = [20, 50, 100].filter(a => a <= room).map(a => `<button class="ghost" data-act="borrow" data-k="${k}" data-v="${a}" ${ok ? "" : "disabled"}>${a}万借りる</button>`).join("");
+    return `<div class="card"><b>${L.name}</b>
+      <div class="meta">${L.text}</div>
+      <div class="meta">上限${L.limit}万(借入中${Math.round(debtOf(L.name))}万) / 年利${Math.round(L.rate * 100)}% / 返済${L.term}週 / 審査: ${L.fame ? "知名度" + L.fame + "以上" : "なし"}${ok ? "" : "(未達)"}</div>
+      <div class="btns">${btns || '<span class="meta">これ以上は借りられません</span>'}</div></div>`;
+  }).join("");
+  const list = state.loans.map((l, i) => `<div class="card"><b>${l.lender}</b>
+    <div class="meta">残り${Math.round(l.rem)}万円 / あと${l.left}週 / 今週の返済 約${(l.rem * l.rate / 52 + l.amount / l.term).toFixed(1)}万円</div>
+    <div class="btns"><button class="ghost" data-act="repay" data-i="${i}">全額返済(${Math.round(l.rem)}万)</button></div></div>`).join("");
+  return `<p class="meta">借入残高 ${Math.round(state.loans.reduce((t, l) => t + l.rem, 0))}万円 / 毎週の返済 約${weekly.toFixed(1)}万円。借りるのに行動は使いません。</p>${cards}${list ? "<h3>借入中</h3>" + list : ""}`;
+}
+
+// ===== バンドとの約束(要望)と契約更新 =====
+const RANK = { single: 1, mini: 2, album: 3 };
+function newPromise(b) {   // バンドからの要望。期限は1年(52週)
+  const r = Math.random(), now = state.week;
+  let p;
+  if (r < 0.5) { const fmt = pick(["single", "mini", "mini", "album"]); p = { kind: "release", fmt, text: FMT[fmt].label + "をリリースする" }; }
+  else if (r < 0.75) p = { kind: "tour", text: "ツアーに出る" };
+  else { const amount = pick([20, 30, 40]); p = { kind: "aid", amount, got: 0, text: "資金援助を合計" + amount + "万円以上する" }; }
+  return Object.assign(p, { from: now, due: now + 52, status: "継続中" });
+}
+function promiseDone(b, kind, arg) {   // 約束を果たしたら信頼度+10
+  b.promises.forEach(p => {
+    if (p.status !== "継続中" || p.kind !== kind) return;
+    if (kind === "release" && RANK[arg] < RANK[p.fmt]) return;
+    if (kind === "aid") { p.got += arg; if (p.got < p.amount) return; }
+    p.status = "達成"; b.trust = Math.min(100, b.trust + 10);
+    log("✅ " + b.name + "との約束を果たした: " + p.text + "(信頼度+10)");
+  });
+}
+function makeRenewal(b) {   // 更新時、人気があるバンドほど取り分(レーベル側)を下げてほしいと打診してくる
+  const want = (b.pop >= 40 && Math.random() < 0.6) || Math.random() < 0.25;
+  const propose = want && b.share > 0.2 ? Math.round((b.share - 0.1) * 10) / 10 : null;
+  log("📄 " + b.name + "の契約更新の時期です。所属バンドの画面で返事をしてください");
+  return { propose, promise: newPromise(b) };
+}
+function renewAnswer(i, v) {
+  const b = state.bands[i], r = b.renewal;
+  if (v === "end") { retire(b, "契約を更新せず退社"); state.bands.splice(i, 1); log(b.name + "との契約を更新しなかった。バンドはレーベルを去った"); return render(); }
+  if (b.trust < 30) { retire(b, "信頼度が低く更新を断られた"); state.bands.splice(i, 1); log(b.name + "は信頼度が低く、更新を断ってレーベルを去った…"); return render(); }
+  if (v === "accept") { b.share = r.propose; b.trust = Math.min(100, b.trust + 5); log(b.name + "の打診を受けて更新(取り分: レーベル" + Math.round(b.share * 10) + "割・信頼度+5)"); }
+  else if (r.propose !== null) { b.trust = Math.max(0, b.trust - 5); log(b.name + "の打診を断って更新(信頼度-5)"); }
+  else { b.trust = Math.min(100, b.trust + 3); log(b.name + "と契約を更新した(信頼度+3)"); }
+  r.promise.from = state.week; r.promise.due = state.week + 52;
+  b.promises.push(r.promise); b.renew += 104; b.renewal = null;
+  log(b.name + "の次の約束: " + r.promise.text + "(1年以内)");
+  render();
+}
+// メジャーデビュー: 承諾すると移籍金がレーベルに入り、バンドは去る。断ると信頼度が少し上がる(移籍金は仮の数字)
+const majorFee = () => 300 + Math.round(state.fame * 5);
+function majorAnswer(i, v) {
+  const b = state.bands[i];
+  if (v === "yes") {
+    const fee = majorFee();
+    state.money += fee; bump("major"); retire(b, "メジャーデビュー"); state.bands.splice(i, 1);
+    log("🌟 " + b.name + "がメジャーデビュー!移籍金" + fee + "万円がレーベルに入った");
+  } else {
+    b.major = false; b.trust = Math.min(100, b.trust + 3);
+    log(b.name + "のメジャーデビューの話を断った。バンドは残ってくれる(信頼度+3)");
+  }
+  render();
+}
+function promo() {
+  if (!useAction()) return;
+  if (state.money < COST.promo) return log("宣伝費が足りません");
+  state.money -= COST.promo; state.used = true; addFame(1);
+  state.bands.forEach(b => addPop(b, 0.15));
+  log("宣伝活動: 知名度が上がった"); render();
+}
+function aid(i) {   // 資金援助は行動を消費しない
+  if (state.money < COST.aid) return log("資金が足りません");
+  state.money -= COST.aid; state.bands[i].fund += COST.aid; state.bands[i].trust = Math.min(100, state.bands[i].trust + 2); promiseDone(state.bands[i], "aid", COST.aid); log(state.bands[i].name + "に" + COST.aid + "万を援助"); render();
+}
+
+// ===== 週の進行 =====
+// ライブの収入は人気ではなく動員数で決まる(動員100人 = 人気25相当)。400人(人気100相当)を超えた分は伸びが緩やかになる
+const liveBase = b => (b.draw <= 400 ? b.draw / 4 : 100 + 25 * Math.log2(b.draw / 400)) * (1 + 0.2 * b.ab["ライブ力"] / 100);   // ライブ力: 集客(ライブ収入)が最大+2割
+const clampDraw = b => { b.draw = clamp(b.draw, 20, 3000); };   // 上限3000人(大型ホールクラス)
+const FEE_SUB = 0.01;               // サブスクの維持費(年率。盤の累計売上の1%、最低0.5万円/年)
+const LL = { cost: 100 }, LT = { weeks: 4, cost: 6, rev: 14 };   // レーベルライブ/レーベルツアー(数値は仮)
+const yr = w => Math.floor((w - 1) / 52) + 1, wkOf = w => (w - 1) % 52 + 1;
+// 1年=52週を12か月に割り振る(4週の月と5週の月がある)。例: 1年目1月第1週
+function monthOf(w) { const i = wkOf(w) - 1, m = Math.floor(i * 12 / 52) + 1; return [m, i - Math.ceil((m - 1) * 52 / 12) + 1]; }
+const dateOf = w => { const [m, k] = monthOf(w); return yr(w) + "年目" + m + "月第" + k + "週"; };
+
+function ensureBand(b) {   // 古いセーブデータにも新しい項目を補う
+  if (b.baito === undefined) b.baito = null; if (b.plan === "baito") b.plan = "rest";
+  if (b.id === undefined) b.id = state.nextId++;
+  if (b.draw === undefined) b.draw = Math.round((b.pop || 10) * 4);
+  b.fests = b.fests || []; b.fo = b.fo || []; b.festRolls = b.festRolls || [];
+  if (b.fest) { b.fo.push(b.fest); } delete b.fest; delete b.festRoll;
+  b.tours = b.tours || []; b.relLog = b.relLog || []; b.mvs = b.mvs || []; b.mvs.forEach(m => { m.hist = m.hist || []; }); if (b.mvTitle === undefined) b.mvTitle = ""; b.scandal = b.scandal || null;
+  if (b.joined === undefined) b.joined = b.renew ? Math.max(1, b.renew - 104) : 0;
+  if (b.subPick === undefined) b.subPick = false;
+  if (b.tourName === undefined) b.tourName = "";
+  if (b.lastRelease === undefined) b.lastRelease = null;
+  (b.discs || []).forEach(d => { if (d.sub === undefined) d.sub = false; });
+  return b;
+}
+function retire(b, reason) {   // 去ったバンドを歴代バンドに記録する
+  state.alumni.push({ id: b.id, name: b.name, genre: b.genre, members: b.members, home: b.home, joined: b.joined, left: state.week, reason,
+    discs: b.discs.map(d => ({ title: d.title, fmt: d.fmt, sub: d.sub, total: d.total, rev: d.rev, status: d.status, premium: !!d.premium })),
+    fests: (b.fests || []).slice(),
+    tours: b.tours.map(t => ({ ...t, to: t.to ?? state.week })),
+    mvs: (b.mvs || []).map(m => ({ title: m.title, discTitle: b.discs[m.disc] && b.discs[m.disc].title, views: m.views, from: m.from })) });
+}
+
+// ===== 大型フェス =====
+// 5〜10月は毎月 第1週と第3週(隔週)、12月は最終週に開催。開催の約2カ月前(8週前〜3週前)に、条件を満たしたバンドへ出演オファーが届く。
+// オファーが届くのは確率で、ジャンルが合うフェスは最大33%、合わないフェスは10%(数値は仮)。ステージは人気・動員で決まる
+const G_PUNK = "パンク", G_MELO = "メロコア", G_SKA = "スカパンク", G_HR = "ハードロック", G_METAL = "メタル", G_POP = "J-POP", G_SOLO = "ソロ";
+const FEST_DEFS = [
+  { m: 5, k: 1, g: [G_PUNK, G_MELO] }, { m: 5, k: 3, g: [G_POP, G_SOLO] },
+  { m: 6, k: 1, g: [G_PUNK, G_SKA] }, { m: 6, k: 3, g: [G_HR, G_METAL] },
+  { m: 7, k: 1, g: [G_MELO, G_SKA, G_PUNK] }, { m: 7, k: 3, g: [G_METAL, G_HR] },
+  { m: 8, k: 1, g: [G_POP, G_SOLO] }, { m: 8, k: 3, g: [G_MELO] },
+  { m: 9, k: 1, g: [G_PUNK, G_HR] }, { m: 9, k: 3, g: [G_POP, G_SOLO] },
+  { m: 10, k: 1, g: [G_METAL, G_PUNK] }, { m: 10, k: 3, g: [G_SKA, G_PUNK, G_HR, G_METAL] },
+  { m: 12, k: 4, g: null },   // 12月の最終週: オールジャンル
+];
+const FEST_TABLE = "<br>" + FEST_DEFS.map(d => "・" + (d.m === 12 ? "12月最終週" : d.m + "月第" + d.k + "週") + ": " + (d.g ? d.g.join("・") : "オールジャンル")).join("<br>");
+const FEST_P = { fit: 0.33, off: 0.10 };
+const FEST = { sub: { pop: 50, draw: 500, pay: 8, cost: 2, label: "サブステージ" }, main: { pop: 75, draw: 750, pay: 25, cost: 5, label: "メインステージ" } };
+const FEST_LEAD = 8;
+const festName = d => d.m === 12 ? "年末の大型フェス" : "夏の大型フェス(" + d.m + "月第" + d.k + "週)";
+function festWeeksOfYear(y) {
+  const base = (y - 1) * 52;
+  return FEST_DEFS.map(d => ({ week: base + (d.m === 12 ? 52 : Math.ceil((d.m - 1) * 52 / 12) + d.k), name: festName(d), g: d.g }));
+}
+const festList = () => [...festWeeksOfYear(yr(state.week)), ...festWeeksOfYear(yr(state.week) + 1)];
+const festFit = (f, b) => !f.g || f.g.includes(b.genre);
+const festNow = b => (b.fo || []).some(f => f.status === "決定" && f.week === state.week);
+const festLabel = f => f.name + "の" + FEST[f.stage].label;
+function festStage(b) { return b.pop >= FEST.main.pop && b.draw >= FEST.main.draw ? "main" : b.pop >= FEST.sub.pop && b.draw >= FEST.sub.draw ? "sub" : null; }
+function festOffers() {   // 毎週、新しい週の頭に呼ぶ
+  festList().forEach(f => {
+    if (state.week < f.week - FEST_LEAD || state.week > f.week - 3) return;
+    state.bands.forEach(b => {
+      if (b.scandal) return;
+      b.fo = b.fo || []; b.festRolls = b.festRolls || [];
+      if (b.festRolls.includes(f.week)) return;
+      const stage = festStage(b); if (!stage) return;
+      b.festRolls.push(f.week); b.festRolls = b.festRolls.filter(w => w > state.week - 20);   // 1フェスにつき1回だけ抽選
+      if (Math.random() >= (festFit(f, b) ? FEST_P.fit : FEST_P.off)) return;
+      const o = { week: f.week, name: f.name, stage, status: "オファー" };
+      b.fo.push(o);
+      log("🎪 " + b.name + "に" + festLabel(o) + "(" + dateOf(f.week) + ")の出演オファーが届いた!バンドの画面で返事をしてください");
+    });
+  });
+  state.bands.forEach(b => {   // 返事をしないまま開催の2週前になったら流れる
+    b.fo = (b.fo || []).filter(o => {
+      if (o.status === "オファー" && state.week >= o.week - 2) { log(b.name + "への" + festLabel(o) + "のオファーは、返事がないまま流れてしまった"); return false; }
+      return true;
+    });
+  });
+}
+function festAnswer(i, k, v) {
+  const b = state.bands[i], o = b && b.fo && b.fo[k];
+  if (!o || o.status !== "オファー") return;
+  if (v === "yes") {
+    if (b.fo.some(x => x !== o && x.status === "決定" && x.week === o.week)) return log("同じ週にはほかのフェスに出演が決まっています");
+    o.status = "決定"; log("🎪 " + b.name + "が" + festLabel(o) + "(" + dateOf(o.week) + ")への出演を決めた。開催週は活動できません(ツアー・盤作成はその分だけ遅れます)");
+  } else { log(b.name + "は" + festLabel(o) + "のオファーを見送った"); b.fo.splice(k, 1); }
+  render();
+}
+function festWeek(b) {
+  const k = b.fo.findIndex(x => x.status === "決定" && x.week === state.week), f = b.fo[k], d = FEST[f.stage], nm = festLabel(f);
+  b.fo.splice(k, 1);
+  if (b.scandal) { b.trust = Math.max(0, b.trust - 5); return log("📰 " + b.name + "はスキャンダルで" + nm + "への出演を辞退した(信頼度-5)"); }
+  const pay = d.pay * rand(0.8, 1.2);   // 出演料は契約の取り分で分配。移動・機材費はバンド負担
+  state.money += pay * b.share; b.fund += pay * (1 - b.share) - d.cost;
+  addPop(b, f.stage === "main" ? 6 : 3); addFame(f.stage === "main" ? 2.5 : 1); b.draw *= f.stage === "main" ? 1.12 : 1.06; clampDraw(b);
+  b.trust = Math.min(100, b.trust + (f.stage === "main" ? 4 : 2));
+  (b.fests = b.fests || []).push({ name: nm, week: state.week }); bump("fest"); if (f.stage === "main") bump("festMain");
+  log("🎪 " + b.name + "が" + nm + "に出演!出演料" + num(pay) + "万(人気・動員・知名度が上がった)");
+}
+
+// ===== 5年ごとのレーベルの目標(存続の審査) =====
+// 5年ごとに、ゲームの進行にかかわる目標がランダムに3つ設定される。期限までに2つ以上達成できれば、次の5年も続けられる。達成できなければゲームオーバー。
+// 5年目の審査に合格したあと(第2期、6年目から)は、メジャーデビュー・レーベルライブが候補に加わり、10年目以降(第3期から)は、レーベルツアー・MV50万回・フェスのメインステージも加わる。数値(目標の大きさ)は仮
+const GOAL_WEEKS = 5 * 52, GOAL_COUNT = 3, GOAL_NEED = 2;
+const bump = (k, n = 1) => { state.stat = state.stat || {}; state.stat[k] = (state.stat[k] || 0) + n; };
+const bumpMax = (k, v) => { state.stat = state.stat || {}; if (v > (state.stat[k] || 0)) state.stat[k] = v; };
+const stat = k => (state.stat && state.stat[k]) || 0;
+const maxOf = f => state.bands.reduce((m, b) => Math.max(m, f(b)), 0);
+// t: [第1期, 第2期, 第3期以降]の目標(nullはその期には出ない) / key: 期間中に積み上げる回数 / now: その時点の状態(期間中に一度でも届けば達成)
+const GOAL_DEFS = {
+  signed: { t: [1, 2, 3], key: "signed", text: n => `新しいバンドと${n}組契約する` },
+  mv: { t: [2, 4, 6], key: "mv", text: n => `MVを${n}本作成する` },
+  album: { t: [1, 3, 5], key: "album", text: n => `アルバム(ミニアルバム含む)を${n}作リリースする` },
+  disc: { t: [4, 10, 16], key: "disc", text: n => `盤(シングル含む)を${n}作リリースする` },
+  buzz: { t: [1, 2, 4], key: "buzz", text: n => `盤をバズらせる(${n}回)` },
+  tour: { t: [1, 3, 5], key: "tour", text: n => `バンドのツアーを${n}回開催する` },
+  fest: { t: [1, 3, 5], key: "fest", text: n => `大型フェスに${n}回出演する`, hint: "人気50以上・動員500以上のバンドに、フェスのオファーが届きます" },
+  pop: { t: [40, 60, 80], now: () => maxOf(b => b.pop), text: n => `所属バンドの人気を${n}以上にする` },
+  draw: { t: [300, 700, 1500], now: () => maxOf(b => b.draw), text: n => `動員${n}人以上のバンドを育てる` },
+  fame: { t: [15, 35, 55], now: () => state.fame, text: n => `レーベルの知名度を${n}以上にする` },
+  money: { t: [250, 400, 700], now: () => state.money, text: n => `レーベル資金が${n}万円に到達する` },
+  bands: { t: [3, 4, 5], now: () => state.bands.length, text: n => `同時に${n}組のバンドを所属させる` },
+  llive: { t: [null, 1, 2], key: "llive", text: n => n === 1 ? "レーベルライブを開催する" : `レーベルライブを${n}回開催する`, hint: "知名度70以上で開催できます" },
+  ltour: { t: [null, null, 1], key: "ltour", text: () => "レーベルツアーを開催する", hint: "知名度70以上で開催できます" },
+  major: { t: [null, 1, 1], key: "major", text: () => "バンドをメジャーデビューさせる", hint: "人気100・動員1500人以上のバンドに話が来ます" },
+  mvmax: { t: [null, null, 500000], now: () => stat("mvMax"), text: n => `MVの再生回数${fmtViews(n)}を達成する(1作品)` },
+  festmain: { t: [null, null, 2], key: "festMain", text: n => `大型フェスのメインステージに${n}回出演する`, hint: "人気75以上・動員750以上が必要です" },
+};
+const goalTier = period => Math.min(3, period) - 1;
+function newGoals(period) {
+  const tier = goalTier(period), ids = Object.keys(GOAL_DEFS).filter(id => GOAL_DEFS[id].t[tier] != null), items = [];
+  while (items.length < GOAL_COUNT && ids.length) {
+    const id = ids.splice(Math.floor(Math.random() * ids.length), 1)[0], d = GOAL_DEFS[id];
+    items.push({ id, target: d.t[tier], done: false, base: d.key ? stat(d.key) : 0 });
+  }
+  return { period, start: (period - 1) * GOAL_WEEKS + 1, due: period * GOAL_WEEKS + 1, items };
+}
+const goalText = g => GOAL_DEFS[g.id].text(g.target);
+const goalVal = g => { const d = GOAL_DEFS[g.id]; return d.key ? stat(d.key) - g.base : d.now(); };
+const goalDone = () => state.goal ? state.goal.items.filter(g => g.done).length : 0;
+function ensureGoal() {   // 目標がないセーブデータ(古い版)にも目標を設定する
+  if (state.goal || state.over) return;
+  state.stat = state.stat || {}; state.goal = newGoals(Math.floor((state.week - 1) / GOAL_WEEKS) + 1);
+  log("🎯 レーベルの目標が設定されました(「🎯 目標」タブで確認できます)");
+}
+function checkGoals() {
+  if (!state.goal) return;
+  state.goal.items.forEach(g => { if (!g.done && goalVal(g) >= g.target) { g.done = true; log("🎯 目標を達成!「" + goalText(g) + "」(" + goalDone() + "/" + GOAL_COUNT + ")"); } });
+}
+function goalWeek() {   // 毎週、新しい週の頭に呼ぶ
+  ensureGoal(); const G = state.goal; if (!G) return;
+  checkGoals();
+  if (state.week >= G.due) return goalReview();
+  if (state.week === G.due - 52) log("🎯 目標の審査まであと1年(達成 " + goalDone() + "/" + GOAL_COUNT + "。" + GOAL_NEED + "つ以上で存続)");
+  if (state.week === G.due - 13) log("🎯 目標の審査まであと3カ月!(達成 " + goalDone() + "/" + GOAL_COUNT + "。" + GOAL_NEED + "つ以上で存続)");
+}
+function goalReview() {
+  const G = state.goal, cleared = goalDone(), passed = cleared >= GOAL_NEED;
+  const res = { period: G.period, cleared, passed, items: G.items.map(g => ({ text: goalText(g), done: g.done })) };
+  if (!passed) { state.over = res; state.screen = "over"; log("💀 目標の審査に通らず、レーベルは存続できなかった…"); save(); return; }
+  state.review = res; state.goal = newGoals(G.period + 1);
+  log("🎉 第" + G.period + "期の目標の審査に合格(" + cleared + "/" + GOAL_COUNT + ")!次の5年も続けられます");
+}
+function goalHTML() {
+  const G = state.goal; if (!G) return '<p class="meta">目標はまだありません。</p>';
+  const left = Math.max(0, G.due - state.week);
+  return `<h3>第${G.period}期の目標(${dateOf(G.start)}〜${dateOf(G.due - 1)})</h3>
+    <p class="meta">審査まであと${left}週(${dateOf(G.due)})。${GOAL_COUNT}つのうち<b>${GOAL_NEED}つ以上</b>を達成すると、次の5年も続けられます。達成できないと、レーベルは存続できず、ゲームオーバーです。一度達成した目標は、そのまま達成のままです。</p>
+    <p class="meta">いまの達成: <b>${goalDone()}/${GOAL_COUNT}</b>${goalDone() >= GOAL_NEED ? "(審査に合格できる状態です)" : ""}</p>` +
+    G.items.map(g => { const v = Math.min(g.target, goalVal(g)), d = GOAL_DEFS[g.id];
+      return `<div class="card${g.done ? " hot" : ""}"><b>${g.done ? "✅" : "🎯"} ${esc(goalText(g))}</b>
+        <div class="gauge"><span></span><div class="track"><div class="fill ${g.done ? "g3" : "g2"}" style="width:${Math.round(v / g.target * 100)}%"></div></div><b>${g.done ? "達成" : (g.target >= 1000 ? "" : num(v) + "/" + g.target)}</b></div>${d.hint ? `<div class="meta">${esc(d.hint)}</div>` : ""}</div>`; }).join("");
+}
+// ===== ゲーム開始直後の、かんたんな説明(最初の目標とバンドの要望も、ここで見せる) =====
+function reviewHTML() {
+  const r = state.review; if (!r) return "";
+  return `<div class="warn" role="alert"><b>🎉 第${r.period}期の目標の審査: 合格(${r.cleared}/${GOAL_COUNT})</b>
+    ${r.items.map(x => (x.done ? "✅ " : "❌ ") + esc(x.text)).join("<br>")}<br>次の5年も、レーベルを続けられます。新しい目標は「🎯 目標」タブで確認してください。
+    <div class="btns"><button data-act="reviewok">OK</button><button class="ghost" data-act="tab" data-v="goal">目標を見る</button></div></div>`;
+}
+function overHTML() {
+  const r = state.over || { period: 1, items: [], cleared: 0 };
+  return `<div class="card hero"><h1>💀 レーベルは存続できなかった…</h1>
+    <p class="meta">第${r.period}期の目標の審査: ${r.cleared}/${GOAL_COUNT}達成(${GOAL_NEED}つ以上が必要でした)</p>
+    <p style="text-align:left">${r.items.map(x => (x.done ? "✅ " : "❌ ") + esc(x.text)).join("<br>")}</p>
+    <h3>${esc((state.label || "").trim() || "名もなきレーベル")}の歩み(${dateOf(state.week)}まで)</h3>
+    <p class="meta">契約したバンド ${state.alumni.length + state.bands.length}組 / 盤 ${stat("disc")}作 / MV ${stat("mv")}本 / 知名度 ${num(state.fame)}</p>
+    <div class="btns" style="justify-content:center"><button data-act="back">タイトルに戻る</button></div></div>`;
+}
+
+function liveWeek(b, k) {
+  addFame(0.3 * k); addPop(b, 0.4 * k);
+  STATS.forEach(s => b.ab[s] = Math.min(b.pot[s], b.ab[s] + 0.15 * k));
+  b.fund += (liveBase(b) / 10 - 3 + rand(-2, 2)) * k;   // 動員数次第でバンド資金が増減
+  b.draw *= 1 + 0.004 * k * (1 + b.ab["ライブ力"] / 100); clampDraw(b);   // ライブを続けると動員が少しずつ増える(ライブ力が高いほど増えやすい)
+}
+function practiceWeek(b) {
+  const t = TYPES[b.type], x = (b.years - t.peak) / t.spread, curve = Math.exp(-x * x);
+  STATS.forEach(s => b.ab[s] = Math.min(b.pot[s], b.ab[s] + 0.8 * b.rate * (0.4 + curve)));
+  b.fund -= 1;
+}
+// グッズ: 制作費2万(バンド資金)、売上は人気とレーベル知名度次第。取り分は契約どおりに分配(数値は仮)
+// バイト: メンバーが働いてバンド資金を稼ぐ(人数が多いほど多い。ソロ約4万〜5人約8万)。人気は上がらず、活動が減るので動員が少しずつ減る(数値は仮)
+const baitoPay = b => 3 + b.members;
+function baitoWeek(b) { b.fund += baitoPay(b) * rand(0.8, 1.2); b.draw *= 0.996; clampDraw(b); }
+function merchWeek(b) {
+  const rev = ((b.pop + 20) / 100) * 10 * (1 + state.fame / 80) * rand(0.5, 1.5);
+  b.fund -= 2; state.money += rev * b.share; b.fund += rev * (1 - b.share);
+}
+// ===== MV(ミュージックビデオ)=====
+// 制作費: レーベル8万 + バンド12万 = 20万(数値は仮)。公開すると人気・動員・知名度が少し上がり、
+// 毎週視聴回数が積み上がって広告収入(1回1円)が入る。同じ盤が売れやすくなり(26週間)、確率でバズる
+const MVC = { lc: 8, bc: 12 };
+const fmtViews = v => v >= 10000 ? (v / 10000).toFixed(v >= 100000 ? 0 : 1) + "万回" : Math.round(v).toLocaleString("ja-JP") + "回";
+function makeMV(b) {
+  if (!b.discs.length) return log(b.name + ": MVを作れる盤がまだありません(先にリリースしましょう)");
+  if (b.fund < MVC.bc || state.money < MVC.lc) return log(b.name + ": MVの制作費が足りません(レーベル" + MVC.lc + "万 / バンド" + MVC.bc + "万)");
+  const di = clamp(b.mvDisc ?? b.discs.length - 1, 0, b.discs.length - 1), d = b.discs[di];
+  const title = (b.mvTitle || "").trim() || d.title;
+  state.money -= MVC.lc; b.fund -= MVC.bc;
+  b.mvs.push({ title, disc: di, from: state.week, age: 0, views: 0, last: 0, peak: 0, rev: 0, buzz: 0, hist: [] });
+  b.mvTitle = "";
+  addPop(b, 1.5); b.draw *= 1.03; clampDraw(b); addFame(0.8);
+  bump("mv"); log("🎬 " + b.name + "のMV「" + title + "」を公開!(費用" + (MVC.lc + MVC.bc) + "万。視聴回数はMVタブで確認できます)");
+}
+function mvWeek(b) {
+  (b.mvs || []).forEach(m => {
+    m.age++;
+    if (m.age <= 20 && !(m.buzz > 0) && Math.random() < 0.008) {   // 公開から20週までは毎週0.8%でバズる
+      m.buzz = 6; addPop(b, 5); b.draw *= 1.1; clampDraw(b); addFame(1.5);
+      log("🎬🔥 " + b.name + "のMV「" + m.title + "」がバズった!再生回数が急上昇");
+    }
+    const v = Math.round((5 + Math.pow(b.pop / 100, 2) * 4000) * (1 + state.fame / 60) * (1 + 0.3 * b.ab["個性"] / 100) * Math.exp(-m.age / 14) * rand(0.8, 1.2) * (m.buzz > 0 ? 6 : 1));
+    if (m.buzz > 0) m.buzz--;
+    m.last = v; m.views += v; m.peak = Math.max(m.peak, v); bumpMax("mvMax", m.views);
+    const rev = v * 0.0001;   // 広告収入(万円)。取り分は契約どおり
+    m.rev += rev; state.money += rev * b.share; b.fund += rev * (1 - b.share);
+    m.hist = m.hist || []; m.hist.push(v); if (m.hist.length > 26) m.hist.shift();
+  });
+}
+const mvBoost = (b, di) => 1 + Math.min(0.3, 0.15 * (b.mvs || []).filter(m => m.disc === di && m.age < 26).length);
+const mvChip = b => (b.mvs && b.mvs.length) ? `<span class="chip">🎬 MV${b.mvs.length}本・${fmtViews(b.mvs.reduce((s, m) => s + m.views, 0))}</span>` : "";
+const spark = h => { const mx = Math.max(1, ...h); return `<div class="spark" aria-hidden="true">${h.map(v => `<i style="height:${Math.max(6, Math.round(v / mx * 100))}%"></i>`).join("")}</div>`; };
+function mvHTML() {
+  const rows = [];
+  state.bands.forEach(b => (b.mvs || []).forEach(m => rows.push({ b, m })));
+  if (!rows.length) return '<p class="meta">まだMVがありません。盤をリリースしたバンドの行動で「MV制作」を選ぶと、ここに視聴回数が並びます。</p>';
+  rows.sort((x, y) => y.m.from - x.m.from);
+  const total = rows.reduce((s, r) => s + r.m.views, 0), rev = rows.reduce((s, r) => s + r.m.rev, 0);
+  return `<p class="meta">MV ${rows.length}本 / 累計 ${fmtViews(total)} / 広告収入の累計 ${rev.toFixed(1)}万円</p>` + rows.map(({ b, m }) => `<div class="card${m.buzz > 0 ? " hot" : ""}" style="--c:${GC[b.genre]}"><b>${m.buzz > 0 ? "🔥 " : ""}🎬 ${esc(m.title)}</b>
+    <div class="chips"><span class="chip g" style="--c:${GC[b.genre]}">${esc(b.name)}</span>${b.discs[m.disc] ? `<span class="chip">💿 ${esc(b.discs[m.disc].title)}</span>` : ""}<span class="chip">公開 ${dateOf(m.from)}(${m.age}週目)</span>${m.buzz > 0 ? '<span class="chip">🔥 バズ中</span>' : ""}</div>
+    <div class="meta">累計 <b>${fmtViews(m.views)}</b> / 今週 ${fmtViews(m.last)} / 週間最高 ${fmtViews(m.peak)} / 広告収入 ${m.rev.toFixed(1)}万円</div>
+    ${m.hist && m.hist.length ? spark(m.hist) + '<div class="meta">直近' + m.hist.length + '週の視聴回数(1週ごと)</div>' : ""}</div>`).join("");
+}
+function startMake(b, k) {
+  const f = FMT[k];
+  if (b.fund < f.bc || state.money < f.lc) return log(b.name + ": " + f.label + "の制作費が足りません(レーベル" + f.lc + "万 / バンド" + f.bc + "万)");
+  state.money -= f.lc; b.fund -= f.bc;
+  b.prod = { fmt: k, i: 0, left: f.w[0], title: b.title, sub: !!b.subPick };
+  log(b.name + "が" + f.label + "『" + b.title + "』の制作に着手(サブスク" + (b.subPick ? "登録" : "なし") + ")"); b.title = songName();
+}
+function relLive(b) { if (b.pending && liveEvent(b, "レコ初ライブ", COST.relLive, 60, 2, 1.5)) b.pending = null; }
+// 主催ライブ/レコ初ライブ/ツアーファイナル共通: 費用はレーベルとバンドで折半、収入は契約の取り分で分配(数値は仮)
+function liveEvent(b, title, cost, factor, popGain, fameGain) {
+  if (state.money < cost / 2 || b.fund < cost / 2) { log(b.name + "の" + title + "は資金不足で開催できない(レーベル・バンドとも" + cost / 2 + "万が必要)"); return false; }
+  const rev = ((liveBase(b) + state.fame) / 100) * factor * rand(0.5, 1.5), net = rev - cost;
+  state.money += rev * b.share - cost / 2; b.fund += rev * (1 - b.share) - cost / 2;
+  addPop(b, popGain); addFame(fameGain); b.draw *= 1.015; clampDraw(b);
+  log(b.name + "の" + title + ": 収入" + num(rev) + "万 / 費用" + cost + "万(" + (net >= 0 ? "黒字" : "赤字") + ")");
+  return true;
+}
+function endTour(b) {
+  if (b.tours[b.tour.ri]) b.tours[b.tour.ri].to = state.week;
+  b.tour = null;
+}
+// ツアーの費用。ソロは人数が少なく移動も宿泊も安いので、通常の半分(数値は仮)
+const tourCost = b => b.members === 1 ? { b: 1, l: 0.5, needB: 12, needL: 6 } : { b: 2, l: 1, needB: 24, needL: 12 };
+function tourWeek(b) {
+  const t = b.tour;
+  liveWeek(b, 1.5);
+  addPop(b, 0.3 * b.ab["演奏力"] / 100);   // 演奏力: ツアー中の人気上昇が最大+約5割
+  if (t.lt) { state.money -= LT.cost; state.money += ((liveBase(b) + state.fame) / 100) * LT.rev * rand(0.6, 1.4); }   // レーベルツアー: 費用も収入もレーベル
+  else { const c = tourCost(b); b.fund -= c.b; state.money -= c.l; }   // 移動費・宿泊費(通常は週3万: バンド2万・レーベル1万 / ソロは週1.5万)
+  t.left--;
+  if (t.left <= 0) {
+    endTour(b);
+    if (t.lt) log("「" + t.name + "」が終了。" + b.name + "が帰ってきた");
+    else { b.final = { left: 2, fresh: true }; log(b.name + "のツアー「" + t.name + "」が終了。2週間以内ならツアーファイナルを選べます"); }
+  }
+}
+function bandWeek(b) {
+  // スキャンダル: 毎週1%。1カ月(4週)行動できず、人気・動員・信頼度が下がる。ツアー中なら中止
+  // 有名なバンド(動員500超 または 人気50超)だけが対象。無名のうちは取り上げられない
+  if (!b.scandal && (b.draw > 500 || b.pop > 50) && Math.random() < 0.01) {
+    b.scandal = { left: 4 }; b.pop = Math.max(0, b.pop - 10); b.draw *= 0.8; clampDraw(b); b.trust = Math.max(0, b.trust - 5);
+    if (b.tour) { const nm = b.tour.name; endTour(b); log(b.name + "のツアー「" + nm + "」は中止になった"); }
+    log("📰 " + b.name + "にスキャンダル発覚!1カ月は活動できない(人気-10・信頼度-5)");
+  }
+  const paused = !!b.scandal, labelBusy = state.llw === state.week, festWk = festNow(b);   // フェス出演の週は、ツアー・盤作成が進まない(出演した分だけ遅れる)
+  const locked = b.scandal || b.tour || b.baito || labelBusy || festNow(b) || (b.prod && STAGES[b.prod.i][1]);
+  const idleWeek = !locked && !b.prod && b.plan === "rest";
+  if (festWk) festWeek(b);   // フェス出演の週(ほかの活動はできない。ツアーもその週は進まない)
+  else if (b.scandal) { /* 活動停止中 */ }
+  else if (b.tour) tourWeek(b);
+  else if (b.baito) { baitoWeek(b); if (--b.baito.left <= 0) { b.baito = null; log(b.name + "のバイトが終わった"); } }
+  else if (!locked) {
+    const [a, k] = b.plan.split(":");
+    if (a === "live") liveWeek(b, 1);
+    else if (a === "practice") practiceWeek(b);
+    else if (a === "merch") merchWeek(b);
+    else if (a === "baito") { b.baito = { left: 4 }; log(b.name + "が1カ月(4週)のバイトに入った。終わるまで他の活動はできません"); baitoWeek(b); b.baito.left--; }
+    else if (a === "mv") makeMV(b);
+    else if (a === "make" && !b.prod) startMake(b, k);
+    else if (a === "rellive") relLive(b);
+    else if (a === "host" && b.pop > 70) liveEvent(b, "主催ライブ", 12, 25, 0.5, 0.5);
+    else if (a === "tourfinal" && b.final) { if (liveEvent(b, "ツアーファイナル", COST.relLive, 60, 2, 1.5)) b.final = null; }
+    else if (a === "tour") {   // ツアーはいつでも出られる(レコ発の直後でなくてよい)
+      if (b.fund < tourCost(b).needB || state.money < tourCost(b).needL) log(b.name + "のツアーは資金不足で出発できない(バンド" + tourCost(b).needB + "万・レーベル" + tourCost(b).needL + "万が必要)");
+      else {
+        const nm = (b.tourName || "").trim() || "ツアー";
+        b.pending = null; b.tourName = "";
+        b.tours.push({ name: nm, from: state.week, to: null });
+        b.tour = { left: 12, name: nm, ri: b.tours.length - 1 };
+        log(b.name + "が3カ月のツアー「" + nm + "」に出発"); promiseDone(b, "tour"); bump("tour"); tourWeek(b);
+      }
+    }
+    if (!["live", "practice", "rest", "merch"].includes(a)) b.plan = "rest";
+  }
+  if (b.scandal && --b.scandal.left <= 0) { b.scandal = null; log(b.name + "の騒動が収まり、活動を再開できる"); }
+  if (b.final) { if (b.final.fresh) delete b.final.fresh; else if (--b.final.left <= 0) b.final = null; }
+  // 動員数: 何もしない週は減る。半年リリースがないと少しずつ減る
+  if (idleWeek) b.draw *= 0.99;
+  if (state.week - (b.lastRelease ?? b.joined) > 26) b.draw *= 0.998;
+  clampDraw(b);
+  // 信頼度の低下: 何もしない週が2週以上続く / 4週で人気がほとんど上がらない(人気100は対象外)
+  b.idle = idleWeek ? b.idle + 1 : 0;
+  if (b.idle >= 2) b.trust = Math.max(0, b.trust - 1);
+  if (state.week % 4 === 0) {
+    if (b.pop < 100 && b.pop - (b.popMark ?? b.pop) < 0.3) b.trust = Math.max(0, b.trust - 2);
+    b.popMark = b.pop;
+  }
+  // 人気が100・動員が1500人以上になると、毎週3%でメジャーデビューの話が来る
+  if (b.pop >= 100 && b.draw >= 1500 && !b.major && Math.random() < 0.03) { b.major = true; log(b.name + "にメジャーデビューの話が来た!(所属バンドの画面で返事をしてください)"); }
+  if (b.prod && !paused && !festWk) {   // 制作の進行(編曲中は行動できる。スキャンダル中は止まる)
+    b.prod.left--;
+    if (b.prod.left <= 0) {
+      b.prod.i++;
+      if (b.prod.i >= STAGES.length) finish(b); else b.prod.left = FMT[b.prod.fmt].w[b.prod.i];
+    }
+  }
+}
+function finish(b) {
+  const d = { title: b.prod.title, fmt: b.prod.fmt, sub: !!b.prod.sub, age: 0, total: 0, rev: 0, mc: 0, status: "発売中" };
+  b.relLog = (b.relLog || []).filter(w => state.week - w < 52); const n = b.relLog.length; b.relLog.push(state.week);   // その年のリリース数
+  b.discs.push(d); b.pending = d; b.prod = null; b.lastRelease = state.week; bump("disc"); if (d.fmt !== "single") bump("album");
+  addPop(b, (d.sub ? 2 : 1));                                  // サブスクは人気が出やすい
+  b.draw *= 1 + (d.sub ? 0.04 : 0.10) + 0.02 * Math.min(4, n); clampDraw(b);     // 非サブスクは動員が増えやすい。年間のリリースが多いほど増える
+  b.trust = Math.min(100, b.trust + 6 + (0.5 - b.share) * 20);   // リリースで信頼度が上がる。レーベルの取り分が小さいほど上がりやすい
+  promiseDone(b, "release", d.fmt);
+  log(b.name + "『" + d.title + "』(" + FMT[d.fmt].label + "・サブスク" + (d.sub ? "登録" : "なし") + ")が完成・発売! レコ初ライブかツアーを選べます");
+}
+function salesWeek(b) {
+  b.discs.forEach((d, di) => {
+    if (d.status !== "発売中") return;
+    d.age++;
+    if (Math.random() < (d.sub ? 0.015 : 0.006) * (1 + 0.5 * b.ab["作曲力"] / 100)) {   // 作曲力: バズりやすさが最大+5割
+        // バズ: サブスク登録は毎週1.5%、なしは0.6%(作曲力が高いほど最大1.5倍)。7週間売上3倍
+      d.buzz = 7; bump("buzz"); addPop(b, 8); addFame(2); b.draw *= 1.25; clampDraw(b);
+      log("🔥 " + b.name + "『" + d.title + "』がバズった!売上と人気が急上昇" + (d.age >= 26 ? "(半年以上たった盤。話題のうちに廃盤にするとプレミアが付く)" : ""));
+    }
+    const f = FMT[d.fmt];
+    const c = Math.round((power(b) / 100) * (b.pop + 20) * (1 + state.fame / 80) * f.boost * GENRES[b.genre] * 2 * Math.exp(-d.age / 12) * rand(0.8, 1.2) * (d.buzz > 0 ? 3 : 1) * (d.sub ? 0.85 : 1.2) * mvBoost(b, di));
+    const rev = c * f.price / 10000;
+    state.money += rev * b.share; b.fund += rev * (1 - b.share);
+    d.total += c; d.rev += rev; d.mc += c; if (d.buzz > 0) d.buzz--;
+    if (d.sub) {   // サブスク: 人気がじわじわ上がる。維持費は年1%(取り分で負担)
+      if (d.age < 52) addPop(b, 0.03);
+      const fee = Math.max(0.5, d.rev * FEE_SUB) / 52;
+      state.money -= fee * b.share; b.fund -= fee * (1 - b.share);
+    } else if (d.age < 52) { b.draw *= 1.001; clampDraw(b); }   // 非サブスク: 動員がじわじわ増える
+    if (d.age % 4 === 0) {   // 半年(26週)までは毎月ログに出す
+      if (d.age <= 26) log(b.name + "『" + d.title + "』この1か月: " + d.mc + "枚 / " + num(d.mc * f.price / 10000) + "万円");
+      d.mc = 0;
+    }
+  });
+}
+// バズった半年以上前の盤を廃盤にすると、プレミアがついて話題になる
+function premiumStop(bi, di) {
+  const b = state.bands[bi], d = b.discs[di];
+  if (!d || d.status !== "発売中" || !(d.buzz > 0) || d.age < 26) return log("この盤は今はプレミア廃盤にできません");
+  d.status = "廃盤"; d.premium = true; d.buzz = 0;
+  const rev = 10 + b.pop * 0.3;
+  state.money += rev * b.share; b.fund += rev * (1 - b.share);
+  addPop(b, 6); b.draw *= 1.15; clampDraw(b); addFame(1.5);
+  log("💎 " + b.name + "『" + d.title + "』を話題のうちに廃盤にした。プレミアで" + num(rev) + "万円の収入、人気+6");
+  render();
+}
+// ===== レーベル主催(知名度70以上)=====
+const labelFree = b => !b.tour && !b.baito && !b.scandal && !festNow(b) && !(b.prod && STAGES[b.prod.i][1]);
+function labelLive() {
+  if (!useAction()) return;
+  if (state.fame < 70) return log("レーベルライブは知名度70以上で開けます");
+  const part = state.bands.filter(b => !b.tour && !b.baito && !b.scandal && !festNow(b));
+  if (!part.length) return log("参加できるバンドがいません");
+  if (state.money < LL.cost) return log("開催費(" + LL.cost + "万)が足りません");
+  state.money -= LL.cost; state.used = true; state.llw = state.week; bump("llive");
+  const sum = part.reduce((s, b) => s + liveBase(b), 0);
+  const rev = (sum * 0.6 + state.fame * 1.5) * rand(0.75, 1.35);
+  state.money += rev; addFame(2);
+  part.forEach(b => { addPop(b, 0.6); b.draw *= 1.03; clampDraw(b); b.trust = Math.min(100, b.trust + 2); });
+  log("🎪 レーベルライブ開催!" + part.length + "組が出演して収入" + num(rev) + "万 / 費用" + LL.cost + "万(" + (rev >= LL.cost ? "黒字" : "赤字") + ")。今週は全バンド行動できません");
+  render();
+}
+function labelTour() {
+  if (!useAction()) return;
+  if (state.fame < 70) return log("レーベルツアーは知名度70以上で出られます");
+  const sel = state.bands.filter(b => state.ltSel.includes(b.id) && labelFree(b));
+  if (!sel.length) return log("連れていくバンドを選んでください");
+  if (state.money < LT.cost * sel.length) return log("ツアー費用(週" + LT.cost * sel.length + "万)が足りません");
+  const nm = (state.ltName || "").trim() || "レーベルツアー";
+  sel.forEach(b => {
+    b.plan = "rest"; b.trust = Math.min(100, b.trust + 2);
+    b.tours.push({ name: nm, from: state.week, to: null, lt: true });
+    b.tour = { left: LT.weeks, name: nm, ri: b.tours.length - 1, lt: true };
+    promiseDone(b, "tour");
+  });
+  state.used = true; state.ltSel = []; state.ltName = ""; bump("ltour");
+  log("🚐 レーベルツアー「" + nm + "」に" + sel.map(b => b.name).join("・") + "が出発(" + LT.weeks + "週間)");
+  render();
+}
+function labelPanel() {
+  if (state.fame < 70) return `<p class="meta">🔒 知名度70になると、レーベルライブとレーベルツアーが開けます(いま ${num(state.fame)})</p>`;
+  const off = state.used ? "disabled" : "";
+  return `<h3>🎪 レーベル主催(知名度70以上)</h3>
+    <p class="meta">どちらも<b>あなたの今週の行動(1つだけ)</b>を使います(今週: ${state.used ? "実行済み" : "未実行"})。</p>
+    <div class="btns"><button class="alt" data-act="llive" ${off}>レーベルライブ(費用${LL.cost}万)</button></div>
+    <p class="meta">その週は、ツアー中などでないバンドは全員行動できません。</p>
+    <p class="meta">レーベルツアー(${LT.weeks}週・1バンドにつき週${LT.cost}万): 連れていくバンドを選ぶと、そのバンドは${LT.weeks}週間行動できません。</p>
+    <div class="btns">${state.bands.map(b => `<button class="ghost ${state.ltSel.includes(b.id) ? "on" : ""}" data-act="ltsel" data-id="${b.id}" ${labelFree(b) ? "" : "disabled"}>${esc(b.name)}</button>`).join("") || '<span class="meta">所属バンドがいません</span>'}</div>
+    <input data-f="ltName" value="${esc(state.ltName || "")}" maxlength="24" placeholder="ツアー名(空欄なら「レーベルツアー」)" aria-label="レーベルツアー名">
+    <div class="btns"><button class="alt" data-act="ltour" ${off}>レーベルツアーに出る</button></div>`;
+}
+// ===== 歴代バンド(所属中のバンドも含む)=====
+function histHTML() {
+  const cur = state.bands.map(b => ({ id: b.id, name: b.name, genre: b.genre, members: b.members, home: b.home, joined: b.joined, left: null, discs: b.discs, tours: b.tours, fests: b.fests || [], mvs: (b.mvs || []).map(m => ({ title: m.title, discTitle: b.discs[m.disc] && b.discs[m.disc].title, views: m.views, from: m.from })), reason: "所属中" }));
+  const items = [...cur, ...[...state.alumni].reverse()];
+  if (!items.length) return '<p class="meta">まだバンドがいません。契約したバンドは、ここに記録されます(去ったあとも残ります)。</p>';
+  // レーベルツアー: 参加したバンド(所属中・去ったバンドの両方)のツアー記録を、名前と開始週でまとめる
+  const lts = {};
+  items.forEach(x => (x.tours || []).filter(tr => tr.lt).forEach(tr => {
+    const k = tr.from + "|" + tr.name, g = lts[k] || (lts[k] = { name: tr.name, from: tr.from, to: tr.to, bands: [] });
+    g.bands.push(x.name); g.to = (g.to == null || tr.to == null) ? null : Math.max(g.to, tr.to);
+  }));
+  const ltList = Object.values(lts).sort((a, b) => b.from - a.from);
+  const ltHTML = `<h3>🚐 レーベルツアー${ltList.length ? "(" + ltList.length + "回)" : ""}</h3>` + (ltList.length ? ltList.map(g => `<div class="card"><b>🚐 「${esc(g.name)}」</b>
+    <div class="meta">${dateOf(g.from)}〜${g.to == null ? "開催中" : dateOf(g.to)} / 参加 ${g.bands.length}組: ${g.bands.map(esc).join("・")}</div></div>`).join("") : '<p class="meta">レーベルツアーはまだありません(知名度70以上で開催できます)。</p>');
+  return '<p class="meta">所属中のバンドと、去ったバンドの記録です。</p>' + ltHTML + '<h3>🎸 バンド</h3>' + items.map(x => {
+    const open = state.hist[x.id], active = x.left === null;
+    const span = active ? `${yr(x.joined)}年目〜(在籍中)` : `${yr(x.joined)}年目〜${yr(x.left)}年目`;
+    const discs = x.discs.map(d => `<div class="meta">💿 『${esc(d.title)}』 ${FMT[d.fmt].label} / ${d.sub ? "📺サブスク" : "サブスクなし"} / 累計${d.total}枚・${num(d.rev)}万円${d.premium ? " / 💎プレミア廃盤" : d.status === "廃盤" ? " / 廃盤" : ""}</div>`).join("") || '<div class="meta">盤はありません</div>';
+    const mvs = (x.mvs || []).map(m => `<div class="meta">🎬 「${esc(m.title)}」${m.discTitle ? " (『" + esc(m.discTitle) + "』)" : ""} ${dateOf(m.from)}公開 / 累計${fmtViews(m.views)}</div>`).join("") || '<div class="meta">MVはありません</div>';
+    const tours = x.tours.map(tr => `<div class="meta">🚐 「${esc(tr.name)}」 ${dateOf(tr.from)}〜${tr.to == null ? "開催中" : dateOf(tr.to)}${tr.lt ? " (レーベルツアー)" : ""}</div>`).join("") || '<div class="meta">ツアーはありません</div>';
+    const fests = (x.fests || []).map(f => `<div class="meta">🎪 ${esc(f.name)} ${dateOf(f.week)}</div>`).join("") || '<div class="meta">フェス出演はありません</div>';
+    return `<div class="card" style="--c:${GC[x.genre]}"><b>${esc(x.name)}</b>
+      <div class="chips"><span class="chip ${active ? "g" : ""}" style="--c:#2a9d8f">${active ? "所属中" : esc(x.reason)}</span><span class="chip g" style="--c:${GC[x.genre]}">${x.genre}</span><span class="chip">${x.members === 1 ? "ソロ" : x.members + "人組"}</span><span class="chip">📍${x.home}</span><span class="chip">在籍 ${span}</span></div>
+      <div class="btns"><button class="ghost" data-act="hist" data-id="${x.id}">${open ? "閉じる" : `盤${x.discs.length}・ツアー${x.tours.length}・MV${(x.mvs || []).length}を見る`}</button></div>
+      ${open ? `<h3>すべての盤</h3>${discs}<h3>すべてのツアー</h3>${tours}<h3>すべてのMV</h3>${mvs}<h3>フェス出演</h3>${fests}` : ""}</div>`;
+  }).join("");
+}
+function nextWeek() {
+  state.bands.forEach(b => { bandWeek(b); salesWeek(b); mvWeek(b); });
+  state.money -= state.bands.reduce((t, b) => t + (4 + b.members * 2) / 52, 0) + OVERHEAD;   // バンドごとの維持費 + レーベルの固定費
+  state.loans = state.loans.filter(l => {   // 借入の返済(利息+元金の均等返済)
+    const prin = l.amount / l.term;
+    state.money -= l.rem * l.rate / 52 + prin; l.rem -= prin; l.left--;
+    if (l.left <= 0) { log(l.lender + "の借入を完済した"); return false; }
+    return true;
+  });   // 運営費は毎週少しずつ
+  state.week++; state.used = false;
+  festOffers();
+  goalWeek();
+  // 契約から2年(104週)ごとに、レーベルから更新の通達を出す(プレイヤーが決める)。約束の期限切れもここで判定
+  state.bands.forEach(b => {
+    b.promises.forEach(p => {
+      if (p.status === "継続中" && state.week >= p.due) {
+        p.status = "未達"; b.trust = Math.max(0, b.trust - 25);
+        log("⚠ " + b.name + "との約束を果たせなかった: " + p.text + "(信頼度-25)");
+      }
+    });
+    if (state.week === b.renew - 4) log(b.name + "の契約更新まであと4週");
+    if (state.week >= b.renew && !b.renewal) b.renewal = makeRenewal(b);
+  });
+  state.bands = state.bands.filter(b => {   // 通達に4週間返事がないと契約が切れる
+    if (b.renewal && state.week >= b.renew + 4) { log(b.name + "は更新の返事がなく、契約が切れてレーベルを去った…"); retire(b, "更新の返事がなく契約切れ"); return false; }
+    return true;
+  });
+  if (state.week % 52 === 1) { state.bands.forEach(b => b.years++); log("新しい年になった"); }
+  if (state.home) {
+    Object.keys(state.pools).forEach(p => { state.pools[p].forEach(b => { if (b.vis !== undefined) b.vis--; }); state.pools[p] = state.pools[p].filter(b => b.vis === undefined || b.vis > 0); });
+    state.respawn = state.respawn.filter(r => {   // 消した分の新バンドが登場
+      if (r.due > state.week) return true;
+      getPool(r.p).push(createBand(r.p)); log(r.p + "のライブハウスに新しいバンドが出始めた");
+      return false;
+    });
+    // 他のレーベルに先に契約される(第一印象が高いバンドほど狙われる。仲が良いほど残りやすい)
+    Object.keys(state.pools).forEach(p => {
+      state.pools[p] = state.pools[p].filter(b => {
+        const gone = b.imp >= 55 && !b.app && Math.random() < (b.fr >= 3 ? 0.03 : 0.06);
+        if (gone && b.fr >= 1) log(b.name + "が他のレーベルと契約してしまった…");
+        return !gone;
+      });
+    });
+    const known = Object.keys(state.pools);
+    if (state.week % 4 === 0 && known.length) { const np = pick(known); getPool(np).push(createBand(np)); }
+    // 逆スカウト: レーベルの知名度が高いほど、入社希望のバンドが現れる(最大8%、友好度は最初から満タン)
+    if (Math.random() < clamp(state.fame / 400, 0, 0.08)) {
+      const dest = pick(REGIONS[state.home]), t = createBand(dest);
+      t.vis = 4; t.fr = 5; t.app = true; getPool(dest).push(t);
+      log(t.name + "(" + dest + ")が「レーベルに入りたい」と連絡してきた(4週間)");
+    }
+    if (Math.random() < 0.05) {
+      const others = Object.keys(REGIONS).filter(r => r !== state.home), from = pick(pick(others.map(r => REGIONS[r]))), dest = pick(REGIONS[state.home]), t = createBand(from);
+      t.vis = 4; t.fr = 1; getPool(dest).push(t); log("ツアーで" + from + "の" + t.name + "が" + dest + "に来ている(4週間)");
+    }
+  }
+  render();
+}
+
+// ===== 描画 =====
+function planOptions(b) {
+  const o = [["rest", "何もしない"], ["live", "ライブ"], ["practice", "練習"], ["merch", "グッズ製作(バ2万)"], ["baito", `バイト(1カ月拘束・毎週バンド資金+約${baitoPay(b)}万)`]];
+  if (!b.prod) Object.keys(FMT).forEach(k => o.push(["make:" + k, `盤作成: ${FMT[k].label}(レ${FMT[k].lc}/バ${FMT[k].bc}万)`]));
+  if (b.pending) o.push(["rellive", `レコ初ライブ(費用${COST.relLive}万・折半)`]);
+  if (b.discs.length) o.push(["mv", `MV制作(費用${MVC.lc + MVC.bc}万: レ${MVC.lc}/バ${MVC.bc})`]);
+  o.push(["tour", b.members === 1 ? "ツアー(12週・週1.5万: バ1/レ0.5・ソロ割)" : "ツアー(12週・週3万: バ2/レ1)"]);
+  if (b.pop > 70) o.push(["host", "主催ライブ(費用12万・折半)"]);
+  if (b.final) o.push(["tourfinal", `ツアーファイナル(費用${COST.relLive}万・折半・残り${b.final.left}週)`]);
+  return o.map(([v, t]) => `<option value="${v}" ${b.plan === v ? "selected" : ""}>${t}</option>`).join("");
+}
+function bandCard(b, i) {
+  const labelBusy = state.llw === state.week, locked = b.scandal || b.tour || b.baito || labelBusy || festNow(b) || (b.prod && STAGES[b.prod.i][1]);
+  const status = b.baito && !festNow(b) ? `🧾 バイト中(残り${b.baito.left}週・毎週バンド資金+約${baitoPay(b)}万)` : festNow(b) ? "🎪 今週はフェス出演のため行動できません" : b.scandal ? `📰 スキャンダル中(残り${b.scandal.left}週)` : b.tour ? `🚐 ツアー「${esc(b.tour.name)}」(残り${b.tour.left}週)` : b.prod ? `${FMT[b.prod.fmt].label}『${esc(b.prod.title)}』制作中: ${STAGES[b.prod.i][0]}(残り${b.prod.left}週)${locked ? "" : " ※行動できます"}` : labelBusy ? "🎪 今週はレーベルライブのため行動できません" : "";
+  const stats = STATS.map(s => `<div class="row" title="${STAT_FX[s]}"><span>${s}</span><div class="track"><div class="fill" style="width:${b.ab[s]}%"></div></div><span>${num(b.ab[s])}</span></div>`).join("");
+  return `<div class="card" style="--c:${GC[b.genre]}"><input class="name" data-f="name" data-i="${i}" value="${esc(b.name)}" aria-label="バンド名">
+    <div class="chips"><span class="chip g" style="--c:${GC[b.genre]}">${b.genre}</span><span class="chip">${b.members === 1 ? "ソロ" : b.members + "人組"}</span><span class="chip">📍${b.home}</span><span class="chip">活動${b.years}年</span><span class="chip">${TYPES[b.type].label}</span><span class="chip">性格 ${b.trait}</span></div>
+    <div class="gauges">${gauge("人気", b.pop, "g2")}${gauge("信頼度", b.trust, "g3")}</div>
+    <div class="chips"><span class="chip ${b.fund < 0 ? "neg" : ""}">💰 バンド資金 ${num(b.fund)}万</span><span class="chip">🎟 動員 ${num(b.draw)}人${b.draw >= 2000 ? "(大型ホール級)" : b.draw >= 1000 ? "(大型ライブハウス級)" : ""}</span>${mvChip(b)}<span class="chip">📄 更新まで${Math.max(0, b.renew - state.week)}週</span><span class="chip">取り分 レーベル${Math.round(b.share * 10)}:バンド${10 - Math.round(b.share * 10)}</span></div><div class="meta">📝 約束: ${b.promises.slice(-4).map(p => `${p.status === "継続中" ? "▶" : p.status === "達成" ? "✅" : "❌"} ${esc(p.text)}${p.status === "継続中" ? `(あと${Math.max(0, p.due - state.week)}週${p.kind === "aid" ? "・" + p.got + "/" + p.amount + "万" : ""})` : ""}`).join("<br>") || "なし"}</div>
+    <div class="stats">${stats}</div><div class="meta">${STATS.map(s => s + "→" + STAT_FX[s]).join(" / ")}</div>
+    ${status ? `<div class="meta">${status}</div>` : ""}
+    ${(b.fo || []).map((o, k) => o.status === "オファー" ? `<div class="meta">🎪 <b>${esc(festLabel(o))}</b>(${dateOf(o.week)})の出演オファー!出演料の目安 ${FEST[o.stage].pay}万 / 返事は開催2週前まで。出演すると開催週は活動できません(ツアー・盤作成はその分だけ遅れます)。</div>
+    <div class="btns"><button data-act="fest" data-i="${i}" data-k="${k}" data-v="yes">出演する</button><button class="ghost" data-act="fest" data-i="${i}" data-k="${k}" data-v="no">見送る</button></div>` : `<div class="meta">🎪 出演決定: ${esc(festLabel(o))}(${dateOf(o.week)})</div>`).join("")}
+    ${locked ? '<div class="meta">今週はこの活動で行動できません</div>' : `<select data-plan="${i}" aria-label="今週の行動">${planOptions(b)}</select>`}
+    ${!b.prod && !locked && b.plan.startsWith("make:") ? `<input data-f="title" data-i="${i}" value="${esc(b.title)}" aria-label="次の作品名" placeholder="次の作品名"><select data-subpick="${i}" aria-label="サブスク"><option value="1" ${b.subPick ? "selected" : ""}>📺 サブスク登録(バズりやすい・人気↑・年1%の維持費)</option><option value="0" ${b.subPick ? "" : "selected"}>💿 サブスクなし(売上↑・動員↑)</option></select>` : ""}
+    ${!locked && b.plan === "mv" && b.discs.length ? `<select data-mvdisc="${i}" aria-label="MVにする盤">${b.discs.map((d, k) => `<option value="${k}" ${(b.mvDisc ?? b.discs.length - 1) === k ? "selected" : ""}>${esc(d.title)}(${FMT[d.fmt].label})</option>`).join("")}</select>
+    <input data-f="mvTitle" data-i="${i}" value="${esc(b.mvTitle || "")}" maxlength="24" aria-label="MVタイトル" placeholder="MVのタイトル(空欄なら盤のタイトル)">` : ""}
+    ${!locked && b.plan === "tour" ? `<input data-f="tourName" data-i="${i}" value="${esc(b.tourName || "")}" maxlength="24" aria-label="ツアー名" placeholder="ツアー名(空欄なら「ツアー」)">` : ""}
+    ${b.renewal ? `<div class="meta">📄 契約更新の時期です。${b.renewal.propose !== null ? `バンドからの打診: 取り分をレーベル${Math.round(b.renewal.propose * 10)}割にしてほしい。` : ""}次の約束: ${esc(b.renewal.promise.text)}(1年以内)</div>
+    <div class="btns">${b.renewal.propose !== null ? `<button data-act="renew" data-i="${i}" data-v="accept">打診を受けて更新</button>` : ""}<button data-act="renew" data-i="${i}" data-v="keep">${b.renewal.propose !== null ? "打診を断って更新" : "更新する"}</button><button class="ghost" data-act="renew" data-i="${i}" data-v="end">更新しない</button></div>` : ""}
+    ${b.major ? `<div class="meta">🌟 メジャーデビューの話が来ています。承諾すると移籍金${majorFee()}万がレーベルに入りますが、このバンドはレーベルを離れます。</div>
+    <div class="btns"><button data-act="major" data-i="${i}" data-v="yes">承諾(+${majorFee()}万)</button><button class="ghost" data-act="major" data-i="${i}" data-v="no">断る</button></div>` : ""}
+    <div class="btns"><button class="ghost" data-act="aid" data-i="${i}">資金援助(${COST.aid}万)</button></div></div>`;
+}
+function liveHTML() {
+  if (!state.home) return `<h3>どのエリアを拠点にしますか?</h3><div class="btns">${Object.keys(REGIONS).map(r => `<button data-act="start" data-v="${r}">${r}</button>`).join("")}</div>`;
+  const away = state.view !== state.home, cost = away ? COST.watchAway : COST.watchHome, p = state.pref, wait = state.week - state.lastVisit < 2;
+  const cards = getPool(p).map((b, i) => ({ b, i })).sort((x, y) => ((y.b.vis !== undefined) - (x.b.vis !== undefined)) || (y.b.fr - x.b.fr)).map(({ b, i }) => `<div class="card${b.vis !== undefined ? " hot" : ""}" style="--c:${GC[b.genre]}"><b>${b.vis !== undefined ? "🔥 " : ""}${b.genre === state.fav ? "★" : ""}${esc(b.name)}</b>${b.app ? ` (入社希望!・残り${b.vis}週)` : b.vis !== undefined ? ` (ツアー来訪中・残り${b.vis}週)` : ""}
+    <div class="chips"><span class="chip g" style="--c:${GC[b.genre]}">${b.genre}</span><span class="chip">${b.members === 1 ? "ソロ" : b.members + "人組"}</span><span class="chip">📍${b.home}</span><span class="chip">活動${b.years}年</span><span class="chip">第一印象 ${b.imp}</span></div>
+    <label class="meta">契約後のバンド名(変えたいときだけ)<input data-f="signName" data-p="${p}" data-i="${i}" maxlength="24" value="${esc(b.signName ?? b.name)}" aria-label="契約後のバンド名"></label>
+    <div class="meta">友好度 <span class="pips">${"●".repeat(b.fr)}<i>${"○".repeat(5 - b.fr)}</i></span></div>
+    <div class="meta">性格: ${b.fr >= 2 || b.known ? `${b.trait}(${TRAITS[b.trait]})` : "不明(友好度2で分かる)"}</div>
+    <div class="btns"><button class="ghost" data-act="watch" data-p="${p}" data-i="${i}" ${state.used || (b.lastWatch !== undefined && state.week - b.lastWatch < 2) ? "disabled" : ""}>${b.lastWatch !== undefined && state.week - b.lastWatch < 2 ? "連続では行けません" : `観に行く(${cost}万)`}</button>
+    <select class="sm" data-share aria-label="レーベルの取り分"><option value="0.3">取り分3割(友好度3)</option><option value="0.4" selected>取り分4割(友好度4)</option><option value="0.5">取り分5割(友好度5)</option></select>
+    <button data-act="sign" data-p="${p}" data-i="${i}" ${state.used ? "disabled" : ""}>契約(${signFeeShown(b)}万${(b.fr >= 2 || b.known) ? "" : "〜"})</button>
+    <button class="ghost" data-act="dismiss" data-p="${p}" data-i="${i}">興味なし</button></div></div>`).join("");
+  return `<h3>あなたの今週の行動(1つだけ): ${state.used ? "実行済み" : "未実行"}</h3>
+    <div class="btns"><button class="alt" data-act="promo" ${state.used ? "disabled" : ""}>宣伝活動(${COST.promo}万)</button></div>
+    <p class="meta">ライブハウスには毎週行けますが、同じバンドには2週続けて行けません。契約は友好度が足りれば別の週にできます。</p>
+    <select data-sel="region" aria-label="エリア">${Object.keys(REGIONS).map(r => `<option value="${r}" ${r === state.view ? "selected" : ""}>${r}${r === state.home ? "(拠点)" : "(遠征)"}</option>`).join("")}</select>
+    <div class="btns">${REGIONS[state.view].map(x => `<button class="ghost ${x === p ? "on" : ""}" data-act="pref" data-v="${x}">${x}</button>`).join("")}</div>${cards || '<p class="meta">今は誰もいません。</p>'}`;
+}
+function salesHTML() {
+  const rows = [];
+  state.bands.forEach((b, bi) => b.discs.forEach((d, di) => {
+    const canPremium = d.status === "発売中" && d.buzz > 0 && d.age >= 26;
+    rows.push(`<div class="card"><b>${esc(b.name)}『${esc(d.title)}』</b>
+    <div class="meta">${FMT[d.fmt].label} / ${d.sub ? "📺サブスク" : "サブスクなし"} / 発売${d.age}週目 / ${d.status}${d.premium ? "(💎プレミア)" : ""}${d.buzz > 0 ? "(🔥バズ中)" : ""} / 累計 ${d.total}枚・${num(d.rev)}万円</div>
+    <div class="btns">${canPremium ? `<button data-act="premium" data-i="${bi}" data-d="${di}">🔥 話題のうちに廃盤(プレミア化)</button>` : ""}${d.status === "発売中" ? `<button class="ghost" data-act="stop" data-i="${bi}" data-d="${di}">廃盤にする</button>` : ""}
+    <button class="ghost" data-act="reissue" data-i="${bi}" data-d="${di}" ${d.status === "発売中" && d.age < 26 ? "disabled" : ""}>再販(${COST.reissue}万)</button></div></div>`);
+  }));
+  return rows.join("") || '<p class="meta">発売した盤がここに並びます。</p>';
+}
+function titleHTML() {
+  const hasSave = [1, 2].some(n => readSlot(n));
+  return `<div class="card hero"><h1>インディーズレーベル、始めました</h1>
+    <p class="meta">新米レーベルの社長として、ライブハウスでバンドを見つけ、育て、人気レーベルを作ろう。</p>
+    <div class="btns" style="justify-content:center"><button data-act="new" style="font-size:1.05rem;padding:12px 26px">はじめから</button><button class="ghost" data-act="cont" style="font-size:1.05rem;padding:12px 26px" ${hasSave ? "" : "disabled"}>つづきから</button></div>
+    <div class="links"><button class="ghost" data-act="howto">❓ 遊び方</button><button class="ghost" data-act="credits">📜 クレジット</button></div>
+    <div class="ver">Version ${GAME_VERSION}</div></div>`;
+}
+// ===== 遊び方・クレジット =====
+let infoFrom = "title";   // 閉じたときに戻る画面(タイトル または ゲーム中)
+// ===== 最初のあんない(新しく始めた直後だけ。3ページ) =====
+const INTRO_PAGES = 3;
+function introHTML() {
+  const pg = Math.min(INTRO_PAGES - 1, state.introPage || 0), G = state.goal, b0 = state.bands[0];
+  const ul = a => `<ul>${a.map(x => `<li>${x}</li>`).join("")}</ul>`;
+  let body = "";
+  if (pg === 0) body = `<h2>🗓 ゲームの流れ</h2>` + ul([
+    "ゲームは<b>1週間ごと</b>に進みます。毎週、あなた(社長)の行動を1つ(ライブハウスでバンドを観に行く、契約する、宣伝するなど)と、各バンドの行動を選んで、画面の上の<b>「この内容で1週間進める」</b>を押します。",
+    `最初から、バンド<b>「${esc(b0 ? b0.name : "")}」</b>が所属しています。「🎤 バンド」タブで、ライブ・練習・グッズ・バイト・盤作成などの行動を選べます。`,
+    "お金は減り続けるので、「🎸 ライブ」タブで気になるバンドを観に行き、仲良くなって契約し、バンドを増やしていきましょう。",
+    "タブ(ライブ・バンド・販売・MV・借入・歴代・目標)は、<b>横にスクロール</b>できます。"]);
+  else if (pg === 1) body = `<h2>🎯 レーベルの目標</h2>` + ul([
+    "このレーベルには、<b>5年ごとに目標が3つ</b>あります。期限までに<b>2つ以上</b>達成できないと、レーベルは存続できず、ゲームオーバーです。",
+    G ? `いまの目標(${dateOf(G.due - 1)}まで):<br>${G.items.map(g => "🎯 <b>" + esc(goalText(g)) + "</b>").join("<br>")}` : "",
+    "進み具合は、画面の上にある<b>「🎯 目標」ボタン</b>、または「🎯 目標」タブで、いつでも確認できます。",
+    "一度達成した目標は、そのまま達成です。5年たつごとに、新しい目標が出ます。"].filter(Boolean));
+  else { const pr = b0 && b0.promises && b0.promises[0]; body = `<h2>📝 バンドの要望(約束)</h2>` + ul([
+    "バンドは、<b>契約したとき</b>と、<b>契約更新のとき</b>(2年ごと)に、「<b>1年以内に○○したい</b>」という要望を出します。これが約束です。",
+    pr ? `最初のバンドの約束: <b>「${esc(pr.text)}」</b>(${dateOf(pr.due)}まで)` : "",
+    "約束を守ると<b>信頼度が上がり</b>、果たせないと<b>信頼度が大きく下がります</b>(-25)。信頼度が低いと、契約更新を断られて、バンドがレーベルを去ってしまいます。",
+    "信頼度は、何もしない週が続いたり、人気が伸びなかったりしても下がります。",
+    "約束は「🎤 バンド」タブのバンドカードの<b>「📝 約束」</b>欄で、いつでも確認できます。",
+    "詳しい説明は、「❓ 遊び方」にあります。"].filter(Boolean)); }
+  return `<div class="card guide"><div class="meta">あんない ${pg + 1} / ${INTRO_PAGES}</div>${body}</div>
+    <div class="btns">${pg > 0 ? '<button class="ghost" data-act="intro" data-v="prev">戻る</button>' : ""}${pg < INTRO_PAGES - 1 ? '<button data-act="intro" data-v="next">次へ</button><button class="ghost" data-act="intro" data-v="go">スキップ</button>' : '<button data-act="intro" data-v="go">ゲームを始める</button>'}</div>`;
+}
+function openInfo(kind) {
+  infoFrom = state.screen === "game" ? "game" : "title";
+  state.screen = kind; render();
+  toTop();
+}
+function howtoHTML() {
+  const sec = (h, items) => `<div class="card guide"><h2>${h}</h2><ul>${items.map(i => `<li>${i}</li>`).join("")}</ul></div>`;
+  return `<div class="hdr"><h1>遊び方</h1><button class="ghost hbtn" data-act="closeinfo">${infoFrom === "game" ? "ゲームに戻る" : "タイトルに戻る"}</button></div>
+    <p class="meta">数字はゲーム内の目安です。遊びながら調整されることがあります。</p>
+    ${sec("🎯 ゲームの目的", [
+      "あなたはインディーズレーベルの社長です。ライブハウスでバンドを見つけて契約し、育てて盤をリリースしながら、レーベルの知名度を上げて人気レーベルを目指します。",
+      "お金が尽きないように、収入と支出のバランスを取ることも大切です。"])}
+    ${sec("📅 1週間の流れ", [
+      "ゲームは1週間ずつ進みます。「この内容で1週間進める」を押すまで、時間は進みません。",
+      "あなた自身の行動は<b>1週に1つだけ</b>です(ライブハウスで観に行く、契約する、宣伝活動、レーベルライブなど)。レーベルライブとレーベルツアーは「🎤 バンド」タブにあります。",
+      "所属バンドは、バンドごとに今週の行動を選びます(ライブ、練習、グッズ製作、盤作成、MV制作、ツアーなど)。",
+      "資金援助、借入、「興味なし」は、あなたの行動を使いません。",
+      "進行は毎週自動で保存されます。画面右上の「タイトルへ」から戻って、「つづきから」で再開できます。"])}
+    ${sec("🎸 バンドを見つけて契約する", [
+      `「ライブ」タブでエリアと県を選ぶと、そこのライブハウスのバンドが見られます。拠点エリアは安く(1回${COST.watchHome}万)、他のエリアへの遠征は高くつきます(${COST.watchAway}万)。`,
+      "バンドを観に行くと<b>友好度</b>が上がります(最大5)。同じバンドには2週続けて行けません。",
+      `契約にはレーベルの取り分に応じた友好度が必要です。取り分3割なら友好度3、4割なら4、5割なら5です。取り分が大きいほど、バンド側の取り分が減ります。契約金は${COST.sign}万が基本です。`,
+      "バンドには性格があり、友好度2で分かります。性格によって条件がつくことがあります(例: 野心家は、レーベルに一定の知名度が必要)。",
+      "🔥マークのバンドは、ツアーで来たバンド(4週間だけ)か、入社希望のバンドです。第一印象が高いバンドは、他のレーベルに先に契約されることもあります。"])}
+    ${sec("💿 盤を作ってリリースする", [
+      "バンドの行動で「盤作成」を選ぶと、シングル、ミニアルバム、アルバムを作れます。費用はレーベルとバンドの両方から出ます。",
+      "流れは、立ち上がり→作曲→収録→編曲→プレス→発売です。編曲は外注なので、その間はバンドは別の行動ができます。",
+      "盤ごとに<b>サブスクに登録するか</b>を選びます。登録すると、人気が出やすくバズりやすい代わりに維持費がかかります。登録しないと、売上とライブの動員が伸びやすくなります。",
+      "発売後は「レコ初ライブ」か「ツアー」を選べます。ツアーが終わったあとの2週間は「ツアーファイナル」も開けます。ツアーはいつでも出られます。",
+      "売上は「販売」タブで確認できます。廃盤や再販もここで行います。発売から半年以上たった盤がバズったときは、「話題のうちに廃盤」にするとプレミアが付きます。",
+      `盤を出したバンドは「MV制作」(費用${MVC.lc + MVC.bc}万)でMVを作れます。視聴回数は「MV」タブで確認できます。`])}
+    ${sec("💰 お金のしくみ", [
+      "お金は、レーベル資金(画面上部)と、バンドごとの<b>バンド資金</b>の2種類があります。",
+      "レーベルには毎週<b>固定費(1万円)</b>と、所属バンドごとの維持費がかかります。バンドが1組だけだと赤字になりやすいので、資金に余裕ができたら、新しいバンドを迎えて収入源を増やしましょう。",
+      "盤、グッズ、MVの収入は、契約で決めた取り分でレーベルとバンドに分けられます。",
+      "バンド資金が足りないと、盤作成やツアーに出られません。「資金援助」で、レーベルからバンドにお金を渡せます。",
+      "資金が足りないときは「借入」タブで、3社から借りられます(上限、金利、審査が違います)。返済は毎週自動です。"])}
+    ${sec("🤝 信頼度と契約更新", [
+      "契約したバンドには<b>信頼度</b>があります。リリースや約束を守ると上がり、何もしない週が続くと下がります。",
+      "バンドは、契約のときと更新のときに「1年以内に○○したい」という要望(約束)を出します。守ると信頼度が上がり、果たせないと大きく下がります。約束はバンドのカードで確認できます。",
+      "契約から2年たつと、レーベルから更新の通達を出します。バンドからの取り分の打診にどう答えるかも決めます。返事をしないと契約が切れます。",
+      "人気が100で、動員が1500人以上のバンドには、メジャーデビューの話が来ることがあります。承諾すると移籍金が入りますが、バンドはレーベルを去ります。",
+      "去ったバンドも、「歴代」タブで盤、ツアー、MVの記録を見られます。"])}
+    ${sec("⚡ いろいろなできごと", [
+      "<b>動員数</b>は、人気とは別に、ライブの観客数を表します。リリースやバズで増え、活動が少ないと減ります。ライブの収入は動員で決まります。",
+      "有名になったバンドは、まれにスキャンダルで1か月活動できなくなります。",
+      "4つのステータスには役割があります。<b>演奏力</b>はツアー中の人気、<b>作曲力</b>は盤のバズりやすさ、<b>ライブ力</b>は集客、<b>個性</b>はMVの視聴回数に、それぞれほんのり効きます(練習やライブで伸びます)。",
+      "<b>大型フェス</b>は、5〜10月の毎月第1週・第3週(隔週)と、12月の最終週に開かれます。開催の約2カ月前から、人気50以上・動員500以上のバンドにはサブステージ、人気75以上・動員750以上のバンドにはメインステージの出演オファーが、<b>確率で</b>届きます(フェスごとに最大33%)。",
+      "フェスにはジャンルの傾向があります。合うジャンルは33%、合わないジャンルは10%の確率です。12月の最終週だけは全ジャンルが33%です。" + FEST_TABLE,
+      "出演を決めると、開催週はそのバンドは活動できません(前後はいつもどおり)。ツアー中なら、ツアーが出演した週の分だけ延び、盤作成中なら、その分だけ完成が遅れます。",
+      "人気70を超えたバンドは「主催ライブ」を開けます。レーベルの知名度が70を超えると、「レーベルライブ」と「レーベルツアー」も開けます。",
+      "曲やMVのバズ、他のレーベルによる引き抜きなど、毎週さまざまなことが確率で起きます。"])}
+    ${sec("🎯 5年ごとの目標(存続の審査)", [
+      "レーベルには、5年ごとに<b>目標</b>が3つ、ランダムに設定されます(「🎯 目標」タブで確認できます)。例: 新しいバンドと契約する、MVを作る、アルバムをリリースする、など。",
+      "期限(5年後)までに<b>2つ以上</b>達成できれば審査に合格して、次の5年も続けられます。達成できないと、レーベルは存続できず、ゲームオーバーです。",
+      "6年目以降は、メジャーデビューさせる、レーベルライブを開催する、といった目標も加わります。10年目以降は、レーベルツアーの開催、MVの再生回数50万回(1作品)、フェスのメインステージ出演などの、さらに難しい目標も加わります。"])}
+    ${sec("💡 序盤のコツ", [
+      "最初は、レーベル設立のときに決めた最初のバンド1組から始まります。まだ人気もステータスも低いので、ライブや練習で育てましょう。",
+      "拠点エリアで、気になるバンドに通って友好度を上げましょう。契約するときに、バンド名を決め直すこともできます。",
+      "資金に余裕がないうちは、グッズ製作・バイト・ライブでバンド資金を貯めてから、盤作成に進むと安定します。",
+      "バンドの約束(要望)の期限を、ときどき確認しましょう。",
+      "バンドを増やしすぎず、育てたいバンドを絞るほうが、お金の面で安定します。"])}
+    <div class="btns"><button class="ghost" data-act="closeinfo">${infoFrom === "game" ? "ゲームに戻る" : "タイトルに戻る"}</button></div>`;
+}
+function creditsHTML() {
+  const row = (k, v) => `<li><b>${k}</b>: ${v}</li>`;
+  const mk = [];
+  if (CREDITS.producer) mk.push(row("企画・制作", esc(CREDITS.producer)));
+  mk.push(row("プログラミング支援", "Claude(Anthropic)"));
+  const contact = [CREDITS.contact && row("お問い合わせ", esc(CREDITS.contact)), CREDITS.site && row("サイト", esc(CREDITS.site))].filter(Boolean);
+  return `<div class="hdr"><h1>クレジット</h1><button class="ghost hbtn" data-act="closeinfo">${infoFrom === "game" ? "ゲームに戻る" : "タイトルに戻る"}</button></div>
+    <div class="card guide"><h2>インディーズレーベル、始めました</h2><p class="meta">Version ${GAME_VERSION}</p></div>
+    <div class="card guide"><h2>制作</h2><ul>${mk.join("")}</ul></div>
+    <div class="card guide"><h2>素材について</h2><ul>
+      <li>このゲームでは、画像、音楽、効果音を使っていません。</li>
+      <li>画面のアイコンは、お使いの端末やブラウザの標準の絵文字です。文字も、端末の標準のフォントで表示しています。</li></ul></div>
+    <div class="card guide"><h2>ご注意</h2><ul>
+      <li>地域名や都道府県名を除いて、ゲームに登場するバンド、人物、曲名、団体、企業(借入先を含む)は、すべて架空のものです。実在のものとは関係ありません。</li>
+      <li>プレイ内容は、お使いのブラウザの中にだけ保存されます。外部のサーバーには送信されません。ブラウザのデータを消すと、セーブも消えます。</li></ul></div>
+    ${contact.length ? `<div class="card guide"><h2>連絡先</h2><ul>${contact.join("")}</ul></div>` : ""}
+    <div class="card guide"><h2>Special Thanks</h2><p>このゲームを遊んでくれた、すべてのみなさん。</p>${CREDITS.producer ? `<p class="meta">© 2026 ${esc(CREDITS.producer)}</p>` : ""}</div>
+    <div class="btns"><button class="ghost" data-act="closeinfo">${infoFrom === "game" ? "ゲームに戻る" : "タイトルに戻る"}</button></div>`;
+}
+function slotHTML(isLoad) {
+  const cards = [1, 2].map(n => {
+    const d = readSlot(n), bad = d && d.bad;
+    const info = !d ? "空き" : bad ? (d.bad === "newer" ? "新しいバージョンのゲームで作られたデータです。このバージョンでは読み込めません。" : "データが壊れていて、読み込めません。") : slotInfo(d);
+    let body;
+    if (delAsk === n) {
+      body = `<div class="warn" role="alert"><b>スロット${n}のデータを削除しますか?</b>削除したデータは元に戻せません。
+        <div class="btns"><button class="danger" data-act="delgo" data-n="${n}">削除する</button><button class="ghost" data-act="delno">やめる</button></div></div>`;
+    } else if (!isLoad && slotAsk === n) {
+      body = `<div class="warn" role="alert"><b>スロット${n}のデータは上書きされます</b>いまのデータは消えて、新しいゲームが保存されます。よろしいですか?
+        <div class="btns"><button class="danger" data-act="slot" data-n="${n}">上書きして始める</button><button class="ghost" data-act="slotno">やめる</button></div></div>`;
+    } else {
+      const main = isLoad ? `<button data-act="loadslot" data-n="${n}" ${d && !bad ? "" : "disabled"}>このデータで続ける</button>`
+        : (d ? `<button data-act="slotask" data-n="${n}">上書きして始める</button>` : `<button data-act="slot" data-n="${n}">ここに保存して始める</button>`);
+      body = `<div class="btns">${main}${d ? `<button class="ghost" data-act="delask" data-n="${n}" aria-label="スロット${n}のデータを削除">🗑 削除</button>` : ""}</div>`;
+    }
+    return `<div class="card"><b>スロット${n}</b><div class="meta">${info}</div>${body}</div>`;
+  }).join("");
+  return `<h3>${isLoad ? "つづきから: セーブデータを選んでください" : "はじめから: 保存するスロットを選んでください(毎週オートセーブ)"}</h3>${slotMsg ? `<p class="meta">${esc(slotMsg)}</p>` : ""}${cards}<div class="btns"><button class="ghost" data-act="back">タイトルに戻る</button></div>`;
+}
+// ===== ツアー名が空欄のまま週を進めるときの確認 =====
+let warnOpen = false;   // 一時的な表示状態(セーブしない)
+// 今週ツアーに出発する予定で、ツアー名が空欄のバンド(出発できない状態のバンドは対象外)
+function emptyTourBands() {
+  return state.bands.filter(b => {
+    const locked = b.scandal || b.tour || state.llw === state.week || (b.prod && STAGES[b.prod.i][1]);
+    return b.plan === "tour" && !locked && !(b.tourName || "").trim() && b.fund >= 24 && state.money >= 12;
+  });
+}
+// タイトルへ戻る前の確認(進行は自動保存されているので、確認だけして戻る)
+let backAsk = false;
+function backHTML() {
+  return `<div class="warn" role="alert"><b>タイトル画面に戻りますか?</b>
+    ここまでの進行はスロット${state.slot || "-"}に自動で保存されています。タイトルの「つづきから」で再開できます。
+    <div class="btns"><button data-act="titlego">タイトルに戻る</button><button class="ghost" data-act="titleno">ゲームを続ける</button></div></div>`;
+}
+function warnHTML() {
+  if (backAsk && state.screen === "game") return backHTML();
+  backAsk = false;
+  const names = emptyTourBands().map(b => esc(b.name));
+  if (!warnOpen || !names.length) { warnOpen = false; return ""; }
+  return `<div class="warn" role="alert"><b>⚠ ツアー名が空欄ですがよろしいですか?</b>
+    ${names.join("・")} のツアー名が空欄です。このまま進めると、ツアー名は「ツアー」になります。
+    <div class="btns"><button data-act="nextgo">このまま進める</button><button class="ghost" data-act="warnback">ツアー名を入力する</button></div></div>`;
+}
+function tryNext() {
+  backAsk = false;
+  if (emptyTourBands().length) { warnOpen = true; render(); return; }
+  warnOpen = false; nextWeek();
+}
+// 表示枠が低いとき(itch.ioの埋め込みなど)は、上部の固定表示が画面の大半を占めて、スクロールできる領域がなくなる。そのときは固定をやめて、全体をスクロールできるようにする
+const inFrame = (() => { try { return typeof window !== "undefined" && window.self !== window.top; } catch (e) { return true; } })();
+if (inFrame && document.documentElement && document.documentElement.classList) document.documentElement.classList.add("framed");
+const toTop = () => { const s = document.getElementById("sc"); if (s) s.scrollTop = 0; if (typeof window !== "undefined" && window.scrollTo) window.scrollTo(0, 0); };
+function fitTop() {
+  const el = document.querySelector(".top"); if (!el) return;
+  el.style.position = "";
+  if (el.offsetHeight > window.innerHeight * 0.34) el.style.position = "static";
+}
+if (typeof window !== "undefined" && window.addEventListener) window.addEventListener("resize", fitTop);
+function render() {
+  const t = document.getElementById("title");
+  t.hidden = state.screen === "game"; document.getElementById("game").hidden = state.screen !== "game";
+  if (state.screen === "title") t.innerHTML = titleHTML();
+  else if (state.screen === "slot") t.innerHTML = slotHTML(false);
+  else if (state.screen === "load") t.innerHTML = slotHTML(true);
+  else if (state.screen === "howto") t.innerHTML = howtoHTML();
+  else if (state.screen === "credits") t.innerHTML = creditsHTML();
+  else if (state.screen === "over") t.innerHTML = overHTML();
+  else if (state.screen === "intro") t.innerHTML = introHTML();
+  else if (state.screen === "area") t.innerHTML = `<h3>レーベル名を決めてください</h3>
+    <input id="labelIn" data-f="label" maxlength="20" value="${esc(state.label)}" placeholder="例: 夜行少年レコーズ">
+    <h3>あなたの好きなジャンル</h3>
+    <p class="meta">好きなジャンルのバンドを見つけやすくなります。</p>
+    <div class="btns">${["こだわりなし", ...Object.keys(GENRES)].map(g => `<button class="ghost ${(state.fav || "こだわりなし") === g ? "on" : ""}" data-act="fav" data-v="${g}">${g}</button>`).join("")}</div>
+    <h3>拠点にするエリアを選んでください</h3>
+    <p class="meta">拠点エリアのライブハウスには安く通えます。他のエリアへの遠征は費用が高くなります。</p>
+    <div class="btns">${Object.keys(REGIONS).map(r => `<button data-act="areago" data-v="${r}">${r}</button>`).join("")}</div>
+    <div class="btns"><button class="ghost" data-act="back">タイトルに戻る</button></div>`;
+  else if (state.screen === "firstband") { const f = state.fb; t.innerHTML = `<h3>最初のバンドを決めてください</h3>
+    <p class="meta">レーベルの最初の所属バンドです(拠点: ${esc(state.fbRegion)})。まだ人気もステータスも低い、駆け出しのバンドです。名前・人数・ジャンルは自由に決められます。</p>
+    <label class="meta">バンド名<input id="fbName" data-f="fbname" maxlength="24" value="${esc(f.name)}" aria-label="バンド名"></label>
+    <div class="btns"><button class="ghost" data-act="fbdice">🎲 名前をランダムに決め直す</button></div>
+    <h3>人数</h3><div class="btns">${FB_MEMBERS.map(n => `<button class="ghost ${f.members === n ? "on" : ""}" data-act="fbmem" data-v="${n}">${n === 1 ? "ソロ" : n + "人"}</button>`).join("")}</div>
+    <h3>ジャンル</h3>${f.members === 1 ? '<p class="meta">ソロの場合、ジャンルは「ソロ」になります。</p>' : `<div class="btns">${Object.keys(GENRES).filter(g => g !== "ソロ").map(g => `<button class="ghost ${f.genre === g ? "on" : ""}" data-act="fbgenre" data-v="${g}">${g}</button>`).join("")}</div>`}
+    <div class="btns"><button data-act="fbgo">この内容でレーベルを設立する</button><button class="ghost" data-act="fbback">戻る</button></div>`; }
+  if (state.screen !== "game") return;
+  save();
+  document.getElementById("goalBtn").textContent = "🎯 目標" + (state.goal ? " " + goalDone() + "/" + GOAL_COUNT : "");
+  document.getElementById("labelName").textContent = state.label.trim() || "名もなきレーベル";
+  document.getElementById("warn").innerHTML = warnHTML() + reviewHTML();
+  document.getElementById("tabs").innerHTML = [["live", "🎸 ライブ"], ["bands", "🎤 バンド" + (state.bands.length ? `(${state.bands.length})` : "")], ["sales", "💿 販売"], ["mv", "🎬 MV"], ["loan", "🏦 借入" + (state.loans.length ? `(残${Math.round(state.loans.reduce((t, l) => t + l.rem, 0))}万)` : "")], ["hist", "📚 歴代"], ["goal", "🎯 目標" + (state.goal ? `(${goalDone()}/${GOAL_COUNT})` : "")]]
+    .map(([k, t]) => `<button class="ghost ${state.tab === k ? "on" : ""}" data-act="tab" data-v="${k}">${t}</button>`).join("");
+  { const tb = document.getElementById("tabs"), on = tb.querySelector(".on"); if (on) tb.scrollLeft = Math.max(0, on.offsetLeft - 24); }
+  document.getElementById("loan").innerHTML = loanHTML();
+  document.getElementById("hist").innerHTML = histHTML();
+  document.getElementById("goal").innerHTML = goalHTML();
+  document.getElementById("mv").innerHTML = mvHTML();
+  ["live", "bands", "sales", "mv", "loan", "hist", "goal"].forEach(k => document.getElementById(k).hidden = state.tab !== k);
+  document.getElementById("time").textContent = dateOf(state.week);
+  document.getElementById("money").textContent = num(state.money);
+  document.getElementById("money").style.color = state.money < 0 ? "#ff9a9a" : "";   // マイナスは赤
+  document.getElementById("fame").textContent = num(state.fame);
+  document.getElementById("home").textContent = state.home || "未定";
+  document.getElementById("live").innerHTML = liveHTML();
+  document.getElementById("bands").innerHTML = labelPanel() + (state.bands.length ? `<p class="meta">毎週のレーベルの支出: 固定費${OVERHEAD}万 + バンド維持費${num(state.bands.reduce((t, b) => t + (4 + b.members * 2) / 52, 0))}万(1年で約${Math.round((OVERHEAD + state.bands.reduce((t, b) => t + (4 + b.members * 2) / 52, 0)) * 52)}万)</p>` + state.bands.map(bandCard).join("") : '<p class="meta">所属バンドはいません。ライブハウスで見つけましょう。</p>');
+  document.getElementById("sales").innerHTML = state.bands.length ? salesHTML() : '<p class="meta">発売した盤がここに並びます。</p>';
+  fitTop();
+}
+
+// ===== イベント =====
+document.addEventListener("click", e => {
+  const el = e.target.closest("[data-act]");
+  if (!el) return;
+  const a = el.dataset.act, i = +el.dataset.i, p = el.dataset.p;
+  if (a === "new") { state.screen = "slot"; slotMsg = ""; delAsk = 0; slotAsk = 0; render(); }
+  else if (a === "cont") { state.screen = "load"; slotMsg = ""; delAsk = 0; slotAsk = 0; render(); }
+  else if (a === "delask") { delAsk = +el.dataset.n; slotAsk = 0; slotMsg = ""; render(); }
+  else if (a === "delno") { delAsk = 0; render(); }
+  else if (a === "delgo") { const n = +el.dataset.n; deleteSlot(n); delAsk = 0; slotMsg = "スロット" + n + "のデータを削除しました。"; render(); }
+  else if (a === "slotask") { slotAsk = +el.dataset.n; delAsk = 0; slotMsg = ""; render(); }
+  else if (a === "slotno") { slotAsk = 0; render(); }
+  else if (a === "slot") { slotAsk = 0; slotMsg = ""; resetState({ screen: "area", slot: +el.dataset.n }); document.getElementById("log").innerHTML = ""; render(); }
+  else if (a === "loadslot") loadSlot(+el.dataset.n);
+  else if (a === "back") { state.screen = "title"; slotMsg = ""; delAsk = 0; slotAsk = 0; render(); }
+  else if (a === "fav") { state.fav = el.dataset.v === "こだわりなし" ? null : el.dataset.v; render(); }
+  else if (a === "dismiss") dismiss(p, i);
+  else if (a === "tab") { state.tab = el.dataset.v; render(); }
+  else if (a === "reviewok") { state.review = null; render(); }
+  else if (a === "goalnow") { state.tab = "goal"; render(); toTop(); }
+  else if (a === "intro") { const v = el.dataset.v; if (v === "next") state.introPage = Math.min(INTRO_PAGES - 1, (state.introPage || 0) + 1); else if (v === "prev") state.introPage = Math.max(0, (state.introPage || 0) - 1); else { state.screen = "game"; state.introPage = 0; state.tab = "live"; } render(); toTop(); }
+  else if (a === "major") majorAnswer(i, el.dataset.v);
+  else if (a === "fest") festAnswer(i, +el.dataset.k, el.dataset.v);
+  else if (a === "renew") renewAnswer(i, el.dataset.v);
+  else if (a === "borrow") borrow(+el.dataset.k, +el.dataset.v);
+  else if (a === "repay") repay(i);
+  else if (a === "premium") premiumStop(i, +el.dataset.d);
+  else if (a === "llive") labelLive();
+  else if (a === "ltour") labelTour();
+  else if (a === "ltsel") { const id = +el.dataset.id; state.ltSel = state.ltSel.includes(id) ? state.ltSel.filter(x => x !== id) : [...state.ltSel, id]; render(); }
+  else if (a === "hist") { const k = el.dataset.id; state.hist[k] = !state.hist[k]; render(); }
+  else if (a === "start") start(el.dataset.v);
+  else if (a === "areago") { state.fbRegion = el.dataset.v; fbInit(); state.screen = "firstband"; render(); }
+  else if (a === "fbdice") { state.fb.name = bandName(state.fb.members); render(); }
+  else if (a === "fbmem") { const n = +el.dataset.v; if (state.fb.members === 1 || n === 1) state.fb.name = bandName(n); state.fb.members = n; render(); }
+  else if (a === "fbgenre") { state.fb.genre = el.dataset.v; render(); }
+  else if (a === "fbback") { state.screen = "area"; render(); }
+  else if (a === "fbgo") start(state.fbRegion);
+  else if (a === "next") tryNext();
+  else if (a === "nextgo") { warnOpen = false; nextWeek(); }
+  else if (a === "warnback") { warnOpen = false; state.tab = "bands"; render(); }
+  else if (a === "totitle") { backAsk = true; render(); }
+  else if (a === "howto") openInfo("howto");
+  else if (a === "credits") openInfo("credits");
+  else if (a === "closeinfo") { state.screen = infoFrom; render(); toTop(); }
+  else if (a === "titleno") { backAsk = false; render(); }
+  else if (a === "titlego") { save(); backAsk = false; warnOpen = false; state.screen = "title"; render(); }
+  else if (a === "pref") { state.pref = el.dataset.v; render(); }
+  else if (a === "watch") watch(p, i);
+  else if (a === "sign") sign(p, i, +el.closest(".card").querySelector("[data-share]").value);
+  else if (a === "promo") promo();
+  else if (a === "aid") aid(i);
+  else if (a === "stop") { state.bands[i].discs[+el.dataset.d].status = "廃盤"; render(); }
+  else if (a === "reissue") {
+    const d = state.bands[i].discs[+el.dataset.d];
+    if (state.money < COST.reissue) return log("再販費用が足りません");
+    state.money -= COST.reissue; d.status = "発売中"; d.age = 4; d.premium = false; log("『" + d.title + "』を再販"); render();
+  }
+});
+document.addEventListener("change", e => {
+  const t = e.target;
+  if (t.dataset.sel === "region") { state.view = t.value; state.pref = REGIONS[t.value][0]; render(); }
+  else if (t.dataset.plan !== undefined) { state.bands[+t.dataset.plan].plan = t.value; render(); }
+  else if (t.dataset.subpick !== undefined) { state.bands[+t.dataset.subpick].subPick = t.value === "1"; save(); }
+  else if (t.dataset.mvdisc !== undefined) { state.bands[+t.dataset.mvdisc].mvDisc = +t.value; save(); }
+});
+document.addEventListener("input", e => {
+  const f = e.target.dataset.f;
+  if (!f) return;
+  if (f === "label") { state.label = e.target.value; return; }
+  if (f === "ltName") { state.ltName = e.target.value; save(); return; }
+  if (f === "signName") { const pb = getPool(e.target.dataset.p)[+e.target.dataset.i]; if (pb) pb.signName = e.target.value; return; }
+  if (f === "fbname") { state.fb.name = e.target.value; return; }
+  const b = state.bands[+e.target.dataset.i];
+  if (f === "name") b.name = e.target.value; else if (f === "title") b.title = e.target.value; else if (f === "tourName") b.tourName = e.target.value; else if (f === "mvTitle") b.mvTitle = e.target.value;
+  save();
+});
+render();
+</script>
+</body>
+</html>
